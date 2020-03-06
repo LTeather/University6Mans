@@ -3,6 +3,7 @@ Welcome to the University 6 Mans bot open source project. This was developed wit
 
 The server now has over 1,000 players from around the world.
 Join here to see it in action: https://discord.gg/hu95nXR
+Or you can visit the website: http://university6mans.com/
 
 This covers everything to do with the Discord bot and website.
 
