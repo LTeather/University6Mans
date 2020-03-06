@@ -27,7 +27,7 @@ You will need:
 ## Running Locally
 Upload the database and run Apache & MySQL on XAMPP. Then hit F5 in Visual Studio Code.
 
-You will need to run: node i 
+You will need to run: "node i"
 In the terminal for it to grab all of the modules required on first starting the project.
 
 ## Donate
