@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Lato|Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/index.css" />
+    <script src="https://kit.fontawesome.com/87455b06e8.js" crossorigin="anonymous"></script>
+    <title>University 6Mans | Leaderboards</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="http://university6mans.com/">University 6Mans</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">            
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="leaderboardsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Leaderboards</a>
+            <div class="dropdown-menu" aria-labelledby="leaderboardsDropdown">
+              <a class="dropdown-item" href="../leaderboards/EU">EU</a>
+              <a class="dropdown-item" href="../leaderboards/NA">NA</a>
+              <a class="dropdown-item" href="../leaderboards/OCE">OCE</a>
+              <a class="dropdown-item" href="../leaderboards/RankS">Rank S</a>
+            </div>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="../Supporters">Supporters</a>
+          </li>  
+          <li class="nav-item">
+              <a class="nav-link" href="../Contact">Contact</a>
+          </li>             
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <div class="login-btn">
+              <a href="../api/discord/login"><i class="fab fa-discord"></i> Login</a>
+          </div>
+        </form>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 class="text-center" style="padding: 20px; margin: 0;">University 6Mans - <%= leaderboard %> Leaderboards</h1>
+
+      <div class="user-search">
+        <input type="text" id="userSearch-input" onkeyup="checkTable()" placeholder="Search leaderboard by name..."
+          title="Type in a name">
+      </div>
+
+      <table id="leaderboard-table" class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">MMR</th>
+            <th scope="col">GP</th>
+            <th scope="col">Win</th>
+            <th scope="col">Loss</th>
+            <th scope="col">Streak</th>
+            <th scope="col">+/-</th>
+            <th scope="col">%</th>
+            <th scope="col">View Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% var counter = 1; %>
+          <% user.forEach(function(user) { %>
+          <% 
+                  var ratio = (parseInt(user.win) / (parseInt(user.win) + parseInt(user.loss))) * 100;
+                  
+                  if(user.win == 0) { ratio = 0; }
+                %>
+          <tr>
+            <td><b>#<%= counter                   %></b></td>
+            <% if (user.has_donated == 1) { %>
+            <td><span class="has_donated"><i class="fas fa-meteor" style="color: #FFC800;"></i>
+                <%= user.username                 %></span></td>
+            <% } else { %>
+            <td><%= user.username                 %></td>
+            <% } %>
+            <td><%= user.mmr                      %></td>
+            <td><%= user.gp                       %></td>
+            <td><%= user.win                      %></td>
+            <td><%= user.loss                     %></td>
+            <td><%= user.streak                   %></td>
+            <td><%= user.win - user.loss          %></td>
+            <td><%= Math.round(ratio * 100) / 100 %>%</td>
+            <td>
+              <div class="profile-btn"><a href='../profile/<%= leaderboard %>/<%= user.discordID %>'><i class="fas fa-user"></i> View
+                  Profile</a></div>
+            </td>
+          </tr>
+          <% counter++; }); %>
+        </tbody>
+      </table>
+      <a href="../supporters">
+        <div class="donate">
+          <h2>Please consider donating!</h2>
+          <p>The 6mans bot project has been created entirely for free and provided for no cost, so if you could spare some
+            change you'd get a cool icon and colour on the leaderboards!</p>
+          <p>Click this box to be taken to the donation page.</p>
+        </div>
+      </a>
+    </div>
+
+    <footer>
+      <p class="text-center">University 6Mans Bot made by Doppla.</p>
+    </footer>
+
+    <script>
+      function checkTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("userSearch-input");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("leaderboard-table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[1];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+  </body>
+</html>

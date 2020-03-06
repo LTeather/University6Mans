@@ -1,0 +1,101 @@
+* {
+    padding: 0;
+    margin: 0;
+    color: #EEE;
+}
+.table th, .table td {
+    text-align: center;
+}
+body {
+  background: #101116;
+}
+h1 {
+    padding: 50px;
+}
+.header {
+    color: #FFF;
+    background: #1d1f28;
+}
+.header .login-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 25px;
+}
+.header .login-btn a {
+  background: #7289DA;
+  padding: 5px 10px;
+  line-height: 35px;
+  color: #fff;
+  font-family: 'Helvetica', 'Arial', sans-sefir;
+  font-size: 20px;
+  display: block;
+  text-decoration: none;
+  border-radius: 3px;
+}        
+footer {
+  background: #1d1f28;
+  position: relative;
+  text-align: center;
+  color: #fff;
+  width: 100%!important;
+  padding: 0.75rem;
+  margin-top: 25px;
+  bottom: 0!important;
+}
+footer p {
+  margin: 0;
+}
+
+.panel {
+    padding: 25px;
+}
+.panel-header {
+    background: rgba(0, 0, 0, .5);
+    border-radius: 10px 10px 0 0;
+}         
+.panel-header h1 {
+    padding: 10px;
+    margin: 0;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 500;
+}
+.panel-mini {
+    padding: 15px 25px 0px 25px;
+}
+.panel-header1 {
+    background: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+}     
+.panel-header1 h1 {
+    padding: 10px;
+    margin: 0;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 500;
+}          
+.panel-body {
+    background: rgba(0, 0, 0, .25);
+    border-radius: 0 0 10px 10px;
+    height: 300px;
+}
+.explanation {
+    padding: 10px;
+}
+
+.explanation .profile-pic {
+    float: left;
+    margin-right: 15px;
+}
+
+.explanation .profile-pic img {
+    border-radius: 10px;
+}
+
+.explanation .explanation-body {
+    line-height: 25px;
+}    
+form {
+    text-align: center;
+}

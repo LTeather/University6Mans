@@ -1,0 +1,161 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/profile.css" />
+    <link rel="stylesheet" type="text/css" href="/index.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato|Poppins&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/87455b06e8.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+    <title>University 6Mans | Profile</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="http://university6mans.com/">University 6Mans</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">             
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="leaderboardsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Leaderboards</a>
+            <div class="dropdown-menu" aria-labelledby="leaderboardsDropdown">
+              <a class="dropdown-item" href="../leaderboards/EU">EU</a>
+              <a class="dropdown-item" href="../leaderboards/NA">NA</a>
+              <a class="dropdown-item" href="../leaderboards/OCE">OCE</a>
+              <a class="dropdown-item" href="../leaderboards/RankS">Rank S</a>
+            </div>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="../Supporters">Supporters</a>
+          </li>  
+          <li class="nav-item">
+              <a class="nav-link" href="../Contact">Contact</a>
+          </li>             
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <div class="login-btn">
+              <a href="../api/discord/login"><i class="fab fa-discord"></i> Login</a>
+          </div>
+        </form>
+      </div>
+    </nav>
+
+    <div class="container">
+      <% if(user[0].discordID !== undefined) {  %>
+      <div class="panel-mini">
+        <div class="panel-header1">
+          <% if (user[0].has_donated == 1) { %>
+          <h1><span class="has_donated"><i class="fas fa-meteor" style="color: #FFC800;"></i>
+              <%= user[0].username %></span></h1>
+          <% } else { %>
+          <h1><%= user[0].username                 %></h1>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h1>Career Stats</h1>
+        </div>
+        <div class="panel-body">
+          <div class="stat">
+            <h2>Total Wins</h2>
+            <hr>
+            <h1><%= user[0].total_wins %></h1>
+          </div>
+          <div class="stat">
+            <h2>Total Losses</h2>
+            <hr>
+            <h1><%= user[0].total_losses %></h1>
+          </div>
+          <div class="stat">
+            <h2>Total Played</h2>
+            <hr>
+            <h1><%= user[0].total_wins + user[0].total_losses %></h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h1>Seasonal Stats</h1>
+        </div>
+        <div class="panel-body2">
+          <div class="stat">
+            <h1><span class="rank">SOON!</span></h1>
+            <h2>LB Position</h2>
+          </div>
+          <div class="stat">
+            <h1><span class="games"><%= user[0].win + user[0].loss %></span></h1>
+            <h2>Games</h2>
+          </div>
+
+          <% 
+                  var ratio = (parseInt(user[0].win) / (parseInt(user[0].win) + parseInt(user[0].loss))) * 100;
+                  
+                  if(user[0].win == 0) { ratio = 0; }
+                  %>
+          <div class="stat">
+            <h1><span class="winrate"><%= Math.round(ratio * 100) / 100 %>%</span></h1>
+            <h2>Win Rate</h2>
+          </div>
+
+          <div class="stat">
+            <h1><span class="rank"><%= user[0].mmr %></span></h1>
+            <h2>MMR</h2>
+          </div>
+          <div class="stat">
+            <div class="half-stat">
+              <h1><span class="games"><%= user[0].win %></span></h1>
+              <h2>Wins</h2>
+            </div>
+            <div class="mini-stat">
+              <h1><span class="games"><%= user[0].loss %></span></h1>
+              <h2>Losses</h2>
+            </div>
+          </div>
+          <div class="stat">
+            <h1><span class="winrate"><%= user[0].streak %></span></h1>
+            <h2>Streak</h2>
+          </div>
+        </div>
+      </div>
+      <% } else { %>
+      <div class="panel">
+        <div class="panel-header">
+          <h1>ERROR!</h1>
+        </div>
+        <div class="panel-body">
+          <h1 class="text-center" style="color: red;">USER DOES NOT EXIST!</h1>
+        </div>
+      </div>
+      <% } %>
+
+      <a href="../supporters">
+        <div class="donate" style="width: calc(100% - 50px);">
+          <h3>Please consider donating!</h3>
+          <p>The 6mans bot project has been created entirely for free and provided for no cost, so if you could spare some
+            change you'd get a cool icon and colour on the leaderboards!</p>
+          <p>Click this box to be taken to the donation page.</p>
+        </div>
+      </a>
+    </div>
+
+    <footer>
+      <p class="text-center">University 6Mans Bot made by Doppla.</p>
+    </footer>
+  </body>
+</html>
