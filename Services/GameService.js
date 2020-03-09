@@ -40,7 +40,8 @@ class GameService {
                 var game = await this.CreateRandomGame(playerList);
                 break;
             case "c":
-                return null;
+                var game = await this.CreateCaptainsGame(playerList);
+                break;
         }
         this.games.push(game.gameId);
         return game;
@@ -95,29 +96,94 @@ class GameService {
      * Creates a captains game.
      */
     async CreateCaptainsGame(playerList) {
-        var pickedPlayers = [];
+        var captains = [];
+        var choices = [];
         var team1 = [];
         var team2 = [];
 
-        // Chooses the two captains at random
-        while (pickedPlayers.length < 2) {
+        // Choose the two captains at random
+        while (captains.length < 2) {
             var rand = Math.floor(Math.random() * 6);
-            if (!pickedPlayers.includes(rand)) {
-                pickedPlayers.push(rand);
+            if (!captains.includes(rand)) {
+                captains.push(rand);
             }
         }
 
-        //NEED TO DO CAPTAINS DM LOGIC HERE. NOT DONE
-        for (var i = 0; i < pickedPlayers.length; ++i) {
-            bot.fetchUser(pickedPlayers[i], false).then(user => {
-                user.send("**Your match has started!** Here's the details:");
-                user.send(teamsMsg);
-            });
+        // Create list of 4 players
+        var firstChoiceList = "";
+        var listNum = 1;
+        for (var i = 0; i < 6; ++i) {
+            if (!captains.includes(i)) {
+                firstChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                ++listNum;
+            }
         }
+
+        // DM first captain with 4 players
+        this.bot.fetchUser(captains[0], false).then(user => {
+            user.send("You get the first choice! Type the number next to the player you want on your team:");
+            user.send(firstChoiceList);
+        });
+
+        // First choice
+        choices.push(await this.getChoice(1));
+
+        // Create list of 3 players
+        var secondChoiceList = "";
+        var listNum = 1;
+        for (var i = 0; i < 6; ++i) {
+            if (!(captains.includes(i) || choices.includes(i))) {
+                secondChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                ++listNum;
+            }
+        }
+
+        // DM second captain with 3 players
+        this.bot.fetchUser(captains[2], false).then(user => {
+            user.send("You get the second and third choices! Type the number next to the first player you want on your team:");
+            user.send(secondChoiceList);
+        });
+
+        // Second choice
+        choices.push(await this.getChoice(2));
+        
+        // Create list of 2 players
+        var thirdChoiceList = "";
+        var listNum = 1;
+        for (var i = 0; i < 6; ++i) {
+            if (!(captains.includes(i) || choices.includes(i))) {
+                thirdChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                ++listNum;
+            }
+        }
+
+        // DM second captain with 2 players
+        this.bot.fetchUser(captains[2], false).then(user => {
+            user.send("Type the number next to the second player you want on your team:");
+            user.send(thirdChoiceList);
+        });
+
+        // Third choice
+        choices.push(await this.getChoice(3));
+
+        // Final choice
+        choices.push(await this.getChoice(4));
+
+        // Add players to teams
+        team1.push(playerList[captains[0]].id);
+        team1.push(playerList[choices[0]].id);
+        team1.push(playerList[choices[3]].id);        
+        team2.push(playerList[captains[1]].id);
+        team2.push(playerList[choices[1]].id);
+        team2.push(playerList[choices[2]].id);
 
         var newGameId = this.CreateNewGameID();
         return new Game(team1, team2, newGameId);
     }    
+
+    async getChoice(num) {
+        return 5-num;
+    }
 
     /**
      * Proposes a substitution for a game. Validates that the user is in the game.
