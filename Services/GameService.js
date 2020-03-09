@@ -8,11 +8,14 @@ const bot = new Commando.Client();
  * Handles the creation and completion of games.
  */
 class GameService {
-    constructor(minGameID, games, databaseService) {
+    constructor(minGameID, games, databaseService, discordService) {
         /* Services */
     
         // Database service.
         this.databaseService = databaseService;
+
+        // Discord service.
+        this.discordService = discordService;
 
         /* Game variables */
 
@@ -109,6 +112,9 @@ class GameService {
             }
         }
 
+        var captain1 = playerList[captains[0]].id;
+        var captain2 = playerList[captains[1]].id;
+
         // Create list of 4 players
         var firstChoiceList = "";
         var listNum = 1;
@@ -120,10 +126,8 @@ class GameService {
         }
 
         // DM first captain with 4 players
-        this.bot.fetchUser(captains[0], false).then(user => {
-            user.send("You get the first choice! Type the number next to the player you want on your team:");
-            user.send(firstChoiceList);
-        });
+        this.discordService.SendDirectMessage(captain1, "You get the first choice! Type the number next to the player you want on your team:");
+        this.discordService.SendDirectMessage(captain1, firstChoiceList);
 
         // First choice
         choices.push(await this.getChoice(1));
@@ -139,10 +143,8 @@ class GameService {
         }
 
         // DM second captain with 3 players
-        this.bot.fetchUser(captains[1], false).then(user => {
-            user.send("You get the second and third choices! Type the number next to the first player you want on your team:");
-            user.send(secondChoiceList);
-        });
+        this.discordService.SendDirectMessage(captain2, "You get the second and third choices! Type the number next to the first player you want on your team:");
+        this.discordService.SendDirectMessage(captain2, secondChoiceList);
 
         // Second choice
         choices.push(await this.getChoice(2));
@@ -158,10 +160,8 @@ class GameService {
         }
 
         // DM second captain with 2 players
-        this.bot.fetchUser(captains[1], false).then(user => {
-            user.send("Type the number next to the second player you want on your team:");
-            user.send(thirdChoiceList);
-        });
+        this.discordService.SendDirectMessage(captain2, "Type the number next to the second player you want on your team:");
+        this.discordService.SendDirectMessage(captain2, thirdChoiceList);
 
         // Third choice
         choices.push(await this.getChoice(3));
@@ -170,10 +170,10 @@ class GameService {
         choices.push(await this.getChoice(4));
 
         // Add players to teams
-        team1.push(playerList[captains[0]].id);
+        team1.push(captain1);
         team1.push(playerList[choices[0]].id);
         team1.push(playerList[choices[3]].id);        
-        team2.push(playerList[captains[1]].id);
+        team2.push(captain2);
         team2.push(playerList[choices[1]].id);
         team2.push(playerList[choices[2]].id);
 
