@@ -72,7 +72,7 @@ async function CreateSixMansInstance(config, bot) {
     // Create Game Service
     var minGameID = await databaseService.GetMaxId() + 1;
     var games = await loadAllGamesFromDatabase(databaseService);
-    var gameService = new GameService(minGameID, games, databaseService, discordService);
+    var gameService = new GameService(minGameID, games, databaseService, discordService, bot);
     // Create queue
     var queue = new Queue();
 

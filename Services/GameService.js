@@ -2,13 +2,12 @@ const Game = require('../Model/Game');
 const Sub = require('../Model/Sub')
 const Commando = require('discord.js-commando');
 const discord = require('discord.js');
-const bot = new Commando.Client();
 
 /**
  * Handles the creation and completion of games.
  */
 class GameService {
-    constructor(minGameID, games, databaseService, discordService) {
+    constructor(minGameID, games, databaseService, discordService, bot) {
         /* Services */
     
         // Database service.
@@ -29,6 +28,8 @@ class GameService {
         this.hasVotedSub = [];
         // The current proposed Sub. Null means no currently proposed sub
         this.proposedSub = null;
+
+        this.bot = bot;
     }
 
     /**
@@ -104,6 +105,8 @@ class GameService {
         var team1 = [];
         var team2 = [];
 
+        console.log("Creating captains game");
+
         // Choose the two captains at random
         while (captains.length < 2) {
             var rand = Math.floor(Math.random() * 6);
@@ -115,61 +118,90 @@ class GameService {
         var captain1 = playerList[captains[0]].id;
         var captain2 = playerList[captains[1]].id;
 
+        console.log("Team 1 Captain is: <@" + captain1 + ">");
+        console.log("Team 2 Captain is: <@" + captain2 + ">");
         this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + ">\n\n**Team 2 Captain is:** <@" + captain2 + ">");
 
         // Create list of 4 players
         var firstChoiceList = "";
         var listNum = 1;
+        var choiceList = {};
         for (var i = 0; i < 6; ++i) {
             if (!captains.includes(i)) {
                 firstChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                choiceList[listNum] = i;
                 ++listNum;
             }
         }
 
         // DM first captain with 4 players
+        console.log("Sending DM to first captain");
         this.discordService.SendDirectMessage(captain1, "You get the first choice! Type the number next to the player you want on your team:");
         this.discordService.SendDirectMessage(captain1, firstChoiceList);
 
         // First choice
-        choices.push(await this.getChoice(1));
+        console.log("About to try and receive the choice");
+        choices = this.getChoice(1, playerList[captains[0]], playerList[captains[1]]).then(choice => {
+            console.log("Received " + choice);
+            choices.push(choiceList[choice]);
 
-        // Create list of 3 players
-        var secondChoiceList = "";
-        var listNum = 1;
-        for (var i = 0; i < 6; ++i) {
-            if (!(captains.includes(i) || choices.includes(i))) {
-                secondChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
-                ++listNum;
+            // Create list of 3 players
+            var secondChoiceList = "";
+            var listNum = 1;
+            choiceList = {};
+            for (var i = 0; i < 6; ++i) {
+                if (!(captains.includes(i) || choices.includes(i))) {
+                    secondChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                    choiceList[listNum] = i;
+                    ++listNum;
+                }
             }
-        }
 
-        // DM second captain with 3 players
-        this.discordService.SendDirectMessage(captain2, "You get the second and third choices! Type the number next to the first player you want on your team:");
-        this.discordService.SendDirectMessage(captain2, secondChoiceList);
+            // DM second captain with 3 players
+            console.log("Sending DM to second captain");
+            this.discordService.SendDirectMessage(captain2, "You get the second and third choices! Type the number next to the first player you want on your team:");
+            this.discordService.SendDirectMessage(captain2, secondChoiceList);
 
-        // Second choice
-        choices.push(await this.getChoice(2));
-        
-        // Create list of 2 players
-        var thirdChoiceList = "";
-        var listNum = 1;
-        for (var i = 0; i < 6; ++i) {
-            if (!(captains.includes(i) || choices.includes(i))) {
-                thirdChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
-                ++listNum;
+            // Second choice
+            console.log("About to try and receive the choice");
+            return this.getChoice(2, playerList[captains[0]], playerList[captains[1]])
+        }).then(choice => {
+            console.log("Received " + choice);
+            choices.push(choiceList[choice]);
+            
+            // Create list of 2 players
+            var thirdChoiceList = "";
+            var listNum = 1;
+            choiceList = {};
+            for (var i = 0; i < 6; ++i) {
+                if (!(captains.includes(i) || choices.includes(i))) {
+                    thirdChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                    choiceList[listNum] = i;
+                    ++listNum;
+                }
             }
-        }
 
-        // DM second captain with 2 players
-        this.discordService.SendDirectMessage(captain2, "Type the number next to the second player you want on your team:");
-        this.discordService.SendDirectMessage(captain2, thirdChoiceList);
+            // DM second captain with 2 players
+            console.log("Sending DM to second captain");
+            this.discordService.SendDirectMessage(captain2, "Type the number next to the second player you want on your team:");
+            this.discordService.SendDirectMessage(captain2, thirdChoiceList);
 
-        // Third choice
-        choices.push(await this.getChoice(3));
-
-        // Final choice
-        choices.push(await this.getChoice(4));
+            // Third choice
+            console.log("About to try and receive the choice");
+            return this.getChoice(3, playerList[captains[0]], playerList[captains[1]])
+        }).then(choice => {
+            console.log("Received " + choice);
+            choices.push(choiceList[choice]);
+            
+            // Remaining player
+            for (var i = 0; i < 6; ++i) {
+                if (!(captains.includes(i) || choices.includes(i))) {
+                    choices.push(i);
+                    break;
+                }
+            }
+            return choices;
+        });
 
         // Add players to teams
         team1.push(captain1);
@@ -183,8 +215,49 @@ class GameService {
         return new Game(team1, team2, newGameId);
     }    
 
-    async getChoice(num) {
-        return 5-num;
+    async getChoice(num, captain1, captain2) {
+        var currentCaptain;
+        var maxChoice;
+
+        console.log("Getting choice " + num);
+        
+        switch (num) {
+            case 1:
+                currentCaptain = captain1;
+                maxChoice = 4;
+                break;
+            case 2:
+                currentCaptain = captain2;
+                maxChoice = 3;
+                break;
+            case 3:
+                currentCaptain = captain2;
+                maxChoice = 2;
+                break;
+            default:
+                break;
+        }
+        
+        console.log("Current captain is " + currentCaptain.id);
+        console.log("Max choice is " + maxChoice);
+
+        // Create a message collector
+        const filter = m => m.author.id === currentCaptain.id && parseInt(m.content) >= 1 && parseInt(m.content) <= maxChoice;
+        currentCaptain.createDM().then(channel => {
+            console.log("Creating collector for DM channel " + channel.id);
+
+            const collector = channel.createMessageCollector(filter, { time: 60000 }); // 60 Seconds before moving on
+
+            collector.on('collect', m => {
+                console.log("Received a valid choice: " + m.content);
+                return parseInt(m.content);
+            });
+
+            collector.on('end', collected => {
+                console.log("Choice timed out so going with 1");
+                return 1;
+            }); 
+        });
     }
 
     /**
