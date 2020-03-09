@@ -34,7 +34,7 @@ class GameService {
     /**
      * Creates a game for the given vote.
      */
-    async CreateGame(vote, playerList) {
+    async CreateGame(vote, playerList, message) {
         switch(vote){
             case "b":
                 var game = await this.CreateBalancedGame(playerList);
@@ -43,7 +43,7 @@ class GameService {
                 var game = await this.CreateRandomGame(playerList);
                 break;
             case "c":
-                var game = await this.CreateCaptainsGame(playerList);
+                var game = await this.CreateCaptainsGame(playerList, message);
                 break;
         }
         this.games.push(game.gameId);
@@ -98,7 +98,7 @@ class GameService {
     /**
      * Creates a captains game.
      */
-    async CreateCaptainsGame(playerList) {
+    async CreateCaptainsGame(playerList, message) {
         var captains = [];
         var choices = [];
         var team1 = [];
@@ -114,6 +114,8 @@ class GameService {
 
         var captain1 = playerList[captains[0]].id;
         var captain2 = playerList[captains[1]].id;
+
+        this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + ">\n\n**Team 2 Captain is:** <@" + captain2 + ">");
 
         // Create list of 4 players
         var firstChoiceList = "";

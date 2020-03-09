@@ -25,7 +25,7 @@ class SixMansInstance {
         var [votingComplete, vote, players] = this.queue.TryEndVoting();
         // If enough votes reached, create a new game
         if(votingComplete) {
-            var game = await this.gameService.CreateGame(vote, players);
+            var game = await this.gameService.CreateGame(vote, players, message);
             // Adds new game to database. This ensures if the database connection/bot goes down, 
             // the game is still remembered and can be submitted later.
             await this.databaseService.AddNewGame(game);
