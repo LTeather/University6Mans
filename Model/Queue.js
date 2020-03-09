@@ -163,7 +163,7 @@ class Queue {
             discordString = "Nobody is in the queue!";
         } else {
             for (var i = 0; i < this.queue.length; ++i) {
-                discordString += this.queue[i];
+                discordString += this.queue[i] + " ";
             }
         }
 
