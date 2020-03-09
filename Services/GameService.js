@@ -139,7 +139,7 @@ class GameService {
         }
 
         // DM second captain with 3 players
-        this.bot.fetchUser(captains[2], false).then(user => {
+        this.bot.fetchUser(captains[1], false).then(user => {
             user.send("You get the second and third choices! Type the number next to the first player you want on your team:");
             user.send(secondChoiceList);
         });
@@ -158,7 +158,7 @@ class GameService {
         }
 
         // DM second captain with 2 players
-        this.bot.fetchUser(captains[2], false).then(user => {
+        this.bot.fetchUser(captains[1], false).then(user => {
             user.send("Type the number next to the second player you want on your team:");
             user.send(thirdChoiceList);
         });
