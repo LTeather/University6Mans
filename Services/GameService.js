@@ -123,12 +123,12 @@ class GameService {
         this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + ">\n\n**Team 2 Captain is:** <@" + captain2 + ">");
 
         // Create list of 4 players
-        var firstChoiceList = "";
+        var choiceListString = "";
         var listNum = 1;
         var choiceList = {};
         for (var i = 0; i < 6; ++i) {
             if (!captains.includes(i)) {
-                firstChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                choiceListString += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
                 choiceList[listNum] = i;
                 ++listNum;
             }
@@ -137,71 +137,70 @@ class GameService {
         // DM first captain with 4 players
         console.log("Sending DM to first captain");
         this.discordService.SendDirectMessage(captain1, "You get the first choice! Type the number next to the player you want on your team:");
-        this.discordService.SendDirectMessage(captain1, firstChoiceList);
+        this.discordService.SendDirectMessage(captain1, choiceListString);
 
         // First choice
+        console.log("About to try and receive the first choice");
+        var choice = await this.getChoice(1, playerList[captains[0]], playerList[captains[1]]);
+        console.log("Received " + choice);
+        choices.push(choiceList[choice]);
+        this.discordService.SendDirectMessage(captain1, "You chose <@" + playerList[choiceList[choice]].id + ">");
+
+        // Create list of 3 players
+        choiceListString = "";
+        var listNum = 1;
+        choiceList = {};
+        for (var i = 0; i < 6; ++i) {
+            if (!(captains.includes(i) || choices.includes(i))) {
+                choiceListString += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                choiceList[listNum] = i;
+                ++listNum;
+            }
+        }
+
+        // DM second captain with 3 players
+        console.log("Sending DM to second captain");
+        this.discordService.SendDirectMessage(captain2, "You get the second and third choices! Type the number next to the first player you want on your team:");
+        this.discordService.SendDirectMessage(captain2, choiceListString);
+
+        // Second choice
         console.log("About to try and receive the choice");
-        choices = this.getChoice(1, playerList[captains[0]], playerList[captains[1]]).then(choice => {
-            console.log("Received " + choice);
-            choices.push(choiceList[choice]);
-
-            // Create list of 3 players
-            var secondChoiceList = "";
-            var listNum = 1;
-            choiceList = {};
-            for (var i = 0; i < 6; ++i) {
-                if (!(captains.includes(i) || choices.includes(i))) {
-                    secondChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
-                    choiceList[listNum] = i;
-                    ++listNum;
-                }
+        choice = await this.getChoice(2, playerList[captains[0]], playerList[captains[1]])
+        console.log("Received " + choice);
+        choices.push(choiceList[choice]);
+        this.discordService.SendDirectMessage(captain2, "You chose <@" + playerList[choiceList[choice]].id + ">");
+        
+        // Create list of 2 players
+        choiceListString = "";
+        var listNum = 1;
+        choiceList = {};
+        for (var i = 0; i < 6; ++i) {
+            if (!(captains.includes(i) || choices.includes(i))) {
+                choiceListString += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
+                choiceList[listNum] = i;
+                ++listNum;
             }
+        }
 
-            // DM second captain with 3 players
-            console.log("Sending DM to second captain");
-            this.discordService.SendDirectMessage(captain2, "You get the second and third choices! Type the number next to the first player you want on your team:");
-            this.discordService.SendDirectMessage(captain2, secondChoiceList);
+        // DM second captain with 2 players
+        console.log("Sending DM to second captain");
+        this.discordService.SendDirectMessage(captain2, "Type the number next to the second player you want on your team:");
+        this.discordService.SendDirectMessage(captain2, choiceListString);
 
-            // Second choice
-            console.log("About to try and receive the choice");
-            return this.getChoice(2, playerList[captains[0]], playerList[captains[1]])
-        }).then(choice => {
-            console.log("Received " + choice);
-            choices.push(choiceList[choice]);
-            
-            // Create list of 2 players
-            var thirdChoiceList = "";
-            var listNum = 1;
-            choiceList = {};
-            for (var i = 0; i < 6; ++i) {
-                if (!(captains.includes(i) || choices.includes(i))) {
-                    thirdChoiceList += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
-                    choiceList[listNum] = i;
-                    ++listNum;
-                }
+        // Third choice
+        console.log("About to try and receive the choice");
+        choice = await this.getChoice(3, playerList[captains[0]], playerList[captains[1]])
+        console.log("Received " + choice);
+        choices.push(choiceList[choice]);
+        this.discordService.SendDirectMessage(captain2, "You chose <@" + playerList[choiceList[choice]].id + ">");
+        
+        // Remaining player
+        for (var i = 0; i < 6; ++i) {
+            if (!(captains.includes(i) || choices.includes(i))) {
+                choices.push(i);
+                break;
             }
-
-            // DM second captain with 2 players
-            console.log("Sending DM to second captain");
-            this.discordService.SendDirectMessage(captain2, "Type the number next to the second player you want on your team:");
-            this.discordService.SendDirectMessage(captain2, thirdChoiceList);
-
-            // Third choice
-            console.log("About to try and receive the choice");
-            return this.getChoice(3, playerList[captains[0]], playerList[captains[1]])
-        }).then(choice => {
-            console.log("Received " + choice);
-            choices.push(choiceList[choice]);
-            
-            // Remaining player
-            for (var i = 0; i < 6; ++i) {
-                if (!(captains.includes(i) || choices.includes(i))) {
-                    choices.push(i);
-                    break;
-                }
-            }
-            return choices;
-        });
+        }
 
         // Add players to teams
         team1.push(captain1);
@@ -218,6 +217,7 @@ class GameService {
     async getChoice(num, captain1, captain2) {
         var currentCaptain;
         var maxChoice;
+        var choice;
 
         console.log("Getting choice " + num);
         
@@ -243,21 +243,19 @@ class GameService {
 
         // Create a message collector
         const filter = m => m.author.id === currentCaptain.id && parseInt(m.content) >= 1 && parseInt(m.content) <= maxChoice;
-        currentCaptain.createDM().then(channel => {
-            console.log("Creating collector for DM channel " + channel.id);
+        var channel = await currentCaptain.createDM();
+        console.log("Awaiting messages from DM channel " + channel.id);
 
-            const collector = channel.createMessageCollector(filter, { time: 60000 }); // 60 Seconds before moving on
-
-            collector.on('collect', m => {
-                console.log("Received a valid choice: " + m.content);
-                return parseInt(m.content);
-            });
-
-            collector.on('end', collected => {
+        await channel.awaitMessages(filter, { maxMatches: 1, time: 60000, errors: ['time'] })
+            .then(collected => {
+                console.log("Received a valid choice: " + collected.first().content);
+                choice = parseInt(collected.first().content);
+            })
+            .catch(collected => {
                 console.log("Choice timed out so going with 1");
-                return 1;
-            }); 
-        });
+                choice = 1;
+            });
+        return choice;
     }
 
     /**
