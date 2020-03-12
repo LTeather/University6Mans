@@ -70,11 +70,11 @@ class SixMansInstance {
      */
     messageUsers(teamsMsg, game) {
         for (var i = 0; i < game.team1.length; ++i) {
-            this.discordService.SendDirectMessage(game.team1[i], "**Your match has started!** Here's the details:");
+            // this.discordService.SendDirectMessage(game.team1[i], "**Your match has started!** Here's the details:");
             this.discordService.SendDirectMessage(game.team1[i], teamsMsg);
         }
         for (var i = 0; i < game.team2.length; ++i) {
-            this.discordService.SendDirectMessage(game.team2[i], "**Your match has started!** Here's the details:");
+            // this.discordService.SendDirectMessage(game.team2[i], "**Your match has started!** Here's the details:");
             this.discordService.SendDirectMessage(game.team2[i], teamsMsg);
         }
     }
