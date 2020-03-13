@@ -133,18 +133,15 @@ class GameService {
             .setDescription("You get the first choice!")
             .setColor(embedColor)
             .setFooter(footer, footerImage)
-        var reactionString = "";
         var playersString = "";
 
         for (var i = 0; i < 6; i++) {
             if (captains.includes(i) || choices.includes(i)) { continue; }
-            reactionString += `${emoji[listNum]}\n`;
-            playersString += `<@${playerList[i].id}>\n`;
+            playersString += `${emoji[listNum]} <@${playerList[i].id}>\n`;
             choiceList[listNum] = i;
             listNum++;
         }
 
-        teamsMsg.addField("Reaction", reactionString, true);
         teamsMsg.addField("Name", playersString, true);
 
         // DM first captain with 4 players
@@ -174,18 +171,15 @@ class GameService {
             .setDescription("You get the second choice!")
             .setColor(embedColor)
             .setFooter(footer, footerImage)
-        var reactionString = "";
         var playersString = "";
 
         for (var i = 0; i < 6; i++) {
             if (captains.includes(i) || choices.includes(i)) { continue; }
-            reactionString += `${emoji[listNum]}\n`;
-            playersString += `<@${playerList[i].id}>\n`;
+            playersString += `${emoji[listNum]} <@${playerList[i].id}>\n`;
             choiceList[listNum] = i;
             listNum++;
         }
 
-        teamsMsg.addField("Reaction", reactionString, true);
         teamsMsg.addField("Name", playersString, true);
 
         // DM second captain with 3 players
@@ -215,18 +209,15 @@ class GameService {
             .setDescription("You get the third and final choice!")
             .setColor(embedColor)
             .setFooter(footer, footerImage)
-        var reactionString = "";
         var playersString = "";
 
         for (var i = 0; i < 6; i++) {
             if (captains.includes(i) || choices.includes(i)) { continue; }
-            reactionString += `${emoji[listNum]}\n`;
-            playersString += `<@${playerList[i].id}>\n`;
+            playersString += `${emoji[listNum]} <@${playerList[i].id}>\n`;
             choiceList[listNum] = i;
             listNum++;
         }
-
-        teamsMsg.addField("Reaction", reactionString, true);
+        
         teamsMsg.addField("Name", playersString, true);
 
         // DM second captain with 2 players
