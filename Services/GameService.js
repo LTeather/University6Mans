@@ -3,6 +3,8 @@ const Sub = require('../Model/Sub')
 const Commando = require('discord.js-commando');
 const discord = require('discord.js');
 
+const emoji = ["0⃣", "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣"];
+
 /**
  * Handles the creation and completion of games.
  */
@@ -123,28 +125,45 @@ class GameService {
         this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + ">\n\n**Team 2 Captain is:** <@" + captain2 + ">");
 
         // Create list of 4 players
-        var choiceListString = "";
         var listNum = 1;
         var choiceList = {};
-        for (var i = 0; i < 6; ++i) {
-            if (!captains.includes(i)) {
-                choiceListString += "[" + (listNum) + "] <@" + playerList[i].id + ">\n";
-                choiceList[listNum] = i;
-                ++listNum;
-            }
+
+        var teamsMsg = new discord.RichEmbed()
+            .setTitle("Captain vote")
+            .setDescription("You get the first choice!")
+            .setColor(embedColor)
+            .setFooter(footer, footerImage)
+        var reactionString = "";
+        var playersString = "";
+
+        for (var i = 0; i < 6; i++) {
+            if (captains.includes(i) || choices.includes(i)) { continue; }
+            reactionString += `${emoji[listNum]}\n`;
+            playersString += `<@${playerList[i].id}>\n`;
+            choiceList[listNum] = i;
+            listNum++;
         }
 
+        teamsMsg.addField("Reaction", reactionString, true);
+        teamsMsg.addField("Name", playersString, true);
+
         // DM first captain with 4 players
-        console.log("Sending DM to first captain");
-        this.discordService.SendDirectMessage(captain1, "You get the first choice! Type the number next to the player you want on your team:");
-        this.discordService.SendDirectMessage(captain1, choiceListString);
+        var message = await this.discordService.SendDirectMessage(captain1, teamsMsg)
+        for (var i = 1; i < listNum; i++) {
+            console.log(`Reacting with ${i}`);
+            await message.react(`${emoji[i]}`);
+        }
 
         // First choice
         console.log("About to try and receive the first choice");
-        var choice = await this.getChoice(1, playerList[captains[0]], playerList[captains[1]]);
+        var choice = await this.getChoice(1, message);
         console.log("Received " + choice);
         choices.push(choiceList[choice]);
-        this.discordService.SendDirectMessage(captain1, "You chose <@" + playerList[choiceList[choice]].id + ">");
+        var confirmMsg = new discord.RichEmbed()
+            .setDescription("You chose <@" + playerList[choiceList[choice]].id + ">")
+            .setColor(embedColor)
+            .setFooter(footer, footerImage)
+        this.discordService.SendDirectMessage(captain1, confirmMsg);
 
         // Create list of 3 players
         choiceListString = "";
@@ -214,8 +233,7 @@ class GameService {
         return new Game(team1, team2, newGameId);
     }    
 
-    async getChoice(num, captain1, captain2) {
-        var currentCaptain;
+    async getChoice(num, message) {
         var maxChoice;
         var choice;
 
@@ -223,33 +241,28 @@ class GameService {
         
         switch (num) {
             case 1:
-                currentCaptain = captain1;
                 maxChoice = 4;
                 break;
             case 2:
-                currentCaptain = captain2;
                 maxChoice = 3;
                 break;
             case 3:
-                currentCaptain = captain2;
                 maxChoice = 2;
                 break;
             default:
                 break;
         }
         
-        console.log("Current captain is " + currentCaptain.id);
         console.log("Max choice is " + maxChoice);
 
-        // Create a message collector
-        const filter = m => m.author.id === currentCaptain.id && parseInt(m.content) >= 1 && parseInt(m.content) <= maxChoice;
-        var channel = await currentCaptain.createDM();
-        console.log("Awaiting messages from DM channel " + channel.id);
+        // Await reactions
+        const filter = reaction => emoji.slice(1, maxChoice).includes(reaction.emoji.name);
+        console.log("Awaiting reaction");
 
-        await channel.awaitMessages(filter, { maxMatches: 1, time: 60000, errors: ['time'] })
+        await message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
             .then(collected => {
-                console.log("Received a valid choice: " + collected.first().content);
-                choice = parseInt(collected.first().content);
+                choice = emoji.indexOf(collected.first().emoji.name);
+                console.log("Received a valid choice: " + choice);
             })
             .catch(collected => {
                 console.log("Choice timed out so going with 1");
