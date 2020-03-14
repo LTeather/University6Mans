@@ -49,7 +49,7 @@ class JoinGame extends Commando.Command {
 
             if (queue.length == 6) {
                 queue.BeginVoting();
-                message.channel.send("**THE QUEUE IS FULL! VOTING STARTING!**\n\nPlayers:" + queueString + "\n\nUse **!r** to pick random teams, or use **!b** to pick balanced teams!");
+                message.channel.send("**THE QUEUE IS FULL! VOTING STARTING!**\n\nPlayers: " + queueString + "\n\nUse **!r** to pick random teams\nUse **!b** to pick balanced teams\nUse **!c** to pick captains");
             }
         }
     }

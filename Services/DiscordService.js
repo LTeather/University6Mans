@@ -35,10 +35,9 @@ class DiscordService {
     /**
      * Sends a DM to a user 
      */
-    SendDirectMessage(userId, text) {
-        this.bot.fetchUser(userId, false).then(user => {
-            user.send(text);
-        });
+    async SendDirectMessage(userId, text) {
+        var user = await this.bot.fetchUser(userId, false);
+        return user.send(text);
     }
 }
 module.exports = DiscordService;

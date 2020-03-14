@@ -129,6 +129,8 @@ class Queue {
             var vote = "c";
         }
         else {
+            // If 2 of each type, remove the last vote
+            if (this.votes.length == 6) this.votes.pop()
             return [false, null, null];
         }
         var players = this.queue.slice();
@@ -163,7 +165,7 @@ class Queue {
             discordString = "Nobody is in the queue!";
         } else {
             for (var i = 0; i < this.queue.length; ++i) {
-                discordString += this.queue[i];
+                discordString += this.queue[i] + " ";
             }
         }
 
