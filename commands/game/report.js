@@ -240,22 +240,14 @@ class ReportScore extends commando.Command {
         return mmr_gain;
     }
 
-    deleteVoiceChannels(gameId, message) {
-        var team1_channel = message.guild.channels.find("name", "#" + gameId + " - Team 1");
-        var team2_channel = message.guild.channels.find("name", "#" + gameId + " - Team 2");
+    async deleteVoiceChannels(gameId, message) {
+        const team1_channel = message.guild.channels.find(c => c.name === "#" + gameId + " - Team 1");
+        const team2_channel = message.guild.channels.find(c => c.name === "#" + gameId + " - Team 2");
+        const waiting_room = team1_channel.parent.children.find(c => c.name === "Waiting Room");
 
-
-        const channels = message.guild.channels.filter(c => c.parentID === '641831359400247326' && c.type === 'voice');
-
-        /*
-        for (const [channelID, channel] of channels) {
-            for (const [memberID, member] of channel.members) {
-            member.setVoiceChannel('641831746110881811')
-                .then(() => console.log(`Moved ${member.user.tag}.`))
-                .catch(console.error);
-            }
+        for (var member of team1_channel.members.array().concat(team2_channel.members.array())) {
+            await member.setVoiceChannel(waiting_room.id);
         }
-        */
 
         if (team1_channel != null && team2_channel != null) {
             team1_channel.delete();
