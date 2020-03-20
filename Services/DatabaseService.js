@@ -294,6 +294,27 @@ class DatabaseService {
     }       
 
     /**
+     * Set the steamID of a player
+     * @param {string} id 
+     * @param {string} steamID 
+     */
+    async setUserSteam(id, steamID) {
+        const query = 'UPDATE 6mans SET steamID=? WHERE discordID=?';
+        await this.pool.query(query, steamID, id);
+    }
+
+    /**
+     * Get the steamID of a player
+     * @param {string} id  
+     */
+    async getUserSteam(id) {
+        const query = 'SELECT steamID FROM 6mans WHERE discordID=?';
+        let [_, rows] = await this.pool.query(query, id);
+        return rows;
+    }
+
+
+    /**
      * Removes a match from the database after cancellation or voiding.
      */
     async removeMatch(id) {

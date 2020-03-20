@@ -32,6 +32,7 @@ CREATE TABLE `6mans` (
   `id` int(11) NOT NULL,
   `discordID` text NOT NULL,
   `username` text NOT NULL,
+  `steamID` text,
   `mmr` int(11) NOT NULL DEFAULT 1000,
   `gp` int(11) NOT NULL DEFAULT 0,
   `win` int(11) NOT NULL DEFAULT 0,
