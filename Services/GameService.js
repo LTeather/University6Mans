@@ -11,7 +11,7 @@ const emoji = ["0⃣", "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣"];
 class GameService {
     constructor(minGameID, games, databaseService, discordService, bot) {
         /* Services */
-    
+
         // Database service.
         this.databaseService = databaseService;
 
@@ -38,7 +38,7 @@ class GameService {
      * Creates a game for the given vote.
      */
     async CreateGame(vote, playerList, message) {
-        switch(vote){
+        switch (vote) {
             case "b":
                 var game = await this.CreateBalancedGame(playerList);
                 break;
@@ -47,6 +47,9 @@ class GameService {
                 break;
             case "c":
                 var game = await this.CreateCaptainsGame(playerList, message);
+                break;
+            case "mb":
+                var game = await this.CreateMMRBalancedGame(playerList);
                 break;
         }
         this.games.push(game.gameId);
@@ -67,6 +70,14 @@ class GameService {
             }
         }
         this.SortMMR(orderedPlayers);
+        return this.CreateBalancedTeams(orderedPlayers);
+    }
+
+    async CreateMMRBalancedGame(playerList) {
+        let players = await this.databaseService.GetAllUsers(playerList);
+        if (!players || players.length < 6) throw Error("Couldn't retrieve player details");
+        let orderedPlayers = players.map((p) => new { discordID: p.discordID, mmr: p.mmr }); // todo change to RLN mmr
+        orderedPlayers.sort((a,b)=> a.mmr-b.mmr);
         return this.CreateBalancedTeams(orderedPlayers);
     }
 
@@ -199,7 +210,7 @@ class GameService {
             .setColor(embedColor)
             .setFooter(footer, footerImage)
         this.discordService.SendDirectMessage(captain2, confirmMsg);
-        
+
         // Create list of 2 players
         listNum = 1;
         choiceList = {};
@@ -217,7 +228,7 @@ class GameService {
             choiceList[listNum] = i;
             listNum++;
         }
-        
+
         teamsMsg.addField("Name", playersString, true);
 
         // DM second captain with 2 players
@@ -237,7 +248,7 @@ class GameService {
             .setColor(embedColor)
             .setFooter(footer, footerImage)
         this.discordService.SendDirectMessage(captain2, confirmMsg);
-        
+
         // Remaining player
         for (var i = 0; i < 6; ++i) {
             if (!(captains.includes(i) || choices.includes(i))) {
@@ -249,21 +260,21 @@ class GameService {
         // Add players to teams
         team1.push(captain1);
         team1.push(playerList[choices[0]].id);
-        team1.push(playerList[choices[3]].id);        
+        team1.push(playerList[choices[3]].id);
         team2.push(captain2);
         team2.push(playerList[choices[1]].id);
         team2.push(playerList[choices[2]].id);
 
         var newGameId = this.CreateNewGameID();
         return new Game(team1, team2, newGameId);
-    }    
+    }
 
     async getChoice(num, message) {
         var maxChoice;
         var choice;
 
         console.log("Getting choice " + num);
-        
+
         switch (num) {
             case 1:
                 maxChoice = 4;
@@ -277,7 +288,7 @@ class GameService {
             default:
                 break;
         }
-        
+
         console.log("Max choice is " + maxChoice);
 
         var validEmoji = emoji.slice(1, maxChoice+1);
@@ -319,7 +330,7 @@ class GameService {
         }
 
         this.proposedSub = new Sub(originalPlayer, substitutePlayer, game);
-        return [true, null]; 
+        return [true, null];
     }
 
     /**

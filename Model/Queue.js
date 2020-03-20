@@ -12,7 +12,7 @@ class Queue {
     }
 
     /**
-     * Trys to add a player to the queue. Returns a tuple of [success, errorMessage]
+     * Tries to add a player to the queue. Returns a tuple of [success, errorMessage]
      * success = True/False , errorMessage is error if fails.
      */
     TryAddToQueue(player) {
@@ -56,11 +56,12 @@ class Queue {
         return [true, null];
     }
 
+    voteOptions = ['b', 'r', 'c', 'mb'];
     /**
      * Trys to add a vote for a player. Returns false if there is an error
      */
     TryAddVote(player, vote) {
-        if (!(vote == "b" || vote == "r" || vote == "c")) {
+        if (!this.voteOptions.includes(vote)) {
             return [false, "Invalid voting option"];
         }
         if (this.isVoting == false) {
@@ -96,47 +97,28 @@ class Queue {
      * Returns [ended:bool, vote:char, players:player[] ]
      */
     TryEndVoting() {
-        var b_count = 0;
-        var c_count = 0;
-        var r_count = 0;
+        let counts = {
+            'b' : 0,
+            'c' : 0,
+            'r' : 0,
+            'mb' : 0,
+         }
 
         // Count the number of votes for balanced or random
         for (var i = 0; i < this.votes.length; ++i) {
-            switch (this.votes[i]) {
-                case "b":
-                    b_count++;
-                    break;
-                case "r":
-                    r_count++;
-                    break;
-                case "c":
-                    c_count++;
-                    break;
-            }
-
+            counts[this.votes[i]]++;
         }
 
-        // If enough votes, end voting.
-        if (b_count == 3) {
-            var vote = "b";
-        }
-
-        else if (r_count == 3) {
-            var vote = "r";
-        }
-
-        else if (c_count == 3) {
-            var vote = "c";
-        }
-        else {
-            // If 2 of each type, remove the last vote
-            if (this.votes.length == 6) this.votes.pop()
+        let vote = Object.entries(counts).find(([k,v]) => v==3 )
+        if (!vote) {
+            // if all 6 votes have been used just remove the last
+            this.queue.pop();
             return [false, null, null];
         }
-        var players = this.queue.slice();
+        
+        let players = this.queue.slice();
         this.EndVoting();
         return [true, vote, players];
-
     }
 
     /**
