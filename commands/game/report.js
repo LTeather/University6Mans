@@ -204,39 +204,32 @@ class ReportScore extends commando.Command {
 
     calculateMmr(mmr_diff) {
         var mmr_gain;
-        if (mmr_diff == 0) {
-            mmr_gain = 15;
+
+        // MMR diff is 
+        // winningTeam_avg - losingTeam_avg
+        // So 
+        // A positive diff means winning team was stronger than losing team (by MMR)
+        // A negative diff means winning team was weaker than losing team (by MMR)
+        // Larger positive diff means W much stronger than L
+        // Larger negative diff means W much weaker than L
+
+        if (mmr_diff >= 100) {
+            mmr_gain = 5
         }
-        else if (mmr_diff <= 15 && mmr_diff >= -15) {
-            mmr_gain = 13;
-        }
-        else if (mmr_diff > -15 && mmr_diff <= -30) {
-            mmr_gain = 11;
-        }
-        else if (mmr_diff > 15 && mmr_diff <= 30) {
-            mmr_gain = 11;
-        }
-        else if (mmr_diff > -30 && mmr_diff <= -50) {
-            mmr_gain = 9;
-        }
-        else if (mmr_diff > 30 && mmr_diff <= 50) {
-            mmr_gain = 9;
-        }
-        else if (mmr_diff > -50 && mmr_diff <= -100) {
-            mmr_gain = 7;
-        }
-        else if (mmr_diff > 50 && mmr_diff <= 100) {
-            mmr_gain = 7;
-        }
-        else if (mmr_diff > -100) {
-            mmr_gain = 5;
-        }
-        else if (mmr_diff > 100) {
-            mmr_gain = 5;
+        else if (mmr_diff <= -100) {
+            mmr_gain = 15
         }
         else {
-            mmr_gain = 11;
+            mmr_gain = Math.round(14.5 - ((mmr_diff+100)*9)/200);
+
+            // mmr_diff                                -100 to 100
+            // mmr_diff + 100                          0 to 200
+            // (mmr_diff + 100)*9                      0 to 1800
+            // ((mmr_diff + 100)*9)/200                0 to 9
+            // 14.5 - ((mmr_diff + 100)*9)/200         14.5 to 5.5
+            // round(14.5 - ((mmr_diff+100)*9)/200)    14 to 6
         }
+
         return mmr_gain;
     }
 

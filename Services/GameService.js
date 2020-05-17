@@ -107,8 +107,6 @@ class GameService {
         var team1 = [];
         var team2 = [];
 
-        console.log("Creating captains game");
-
         // Choose the two captains at random
         while (captains.length < 2) {
             var rand = Math.floor(Math.random() * 6);
@@ -120,8 +118,6 @@ class GameService {
         var captain1 = playerList[captains[0]].id;
         var captain2 = playerList[captains[1]].id;
 
-        console.log("Team 1 Captain is: <@" + captain1 + ">");
-        console.log("Team 2 Captain is: <@" + captain2 + ">");
         this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + ">\n\n**Team 2 Captain is:** <@" + captain2 + ">");
 
         // Create list of 4 players
@@ -147,14 +143,11 @@ class GameService {
         // DM first captain with 4 players
         var message = await this.discordService.SendDirectMessage(captain1, teamsMsg)
         for (var i = 1; i < listNum; i++) {
-            console.log(`Reacting with ${i}`);
             await message.react(`${emoji[i]}`);
         }
 
         // First choice
-        console.log("About to try and receive the first choice");
         var choice = await this.getChoice(1, message);
-        console.log("Received " + choice);
         choices.push(choiceList[choice]);
         var confirmMsg = new discord.RichEmbed()
             .setDescription("You chose <@" + playerList[choiceList[choice]].id + ">")
@@ -185,14 +178,11 @@ class GameService {
         // DM second captain with 3 players
         var message = await this.discordService.SendDirectMessage(captain2, teamsMsg)
         for (var i = 1; i < listNum; i++) {
-            console.log(`Reacting with ${i}`);
             await message.react(`${emoji[i]}`);
         }
 
         // Second choice
-        console.log("About to try and receive the second choice");
         choice = await this.getChoice(2, message);
-        console.log("Received " + choice);
         choices.push(choiceList[choice]);
         var confirmMsg = new discord.RichEmbed()
             .setDescription("You chose <@" + playerList[choiceList[choice]].id + ">")
@@ -223,14 +213,11 @@ class GameService {
         // DM second captain with 2 players
         var message = await this.discordService.SendDirectMessage(captain2, teamsMsg)
         for (var i = 1; i < listNum; i++) {
-            console.log(`Reacting with ${i}`);
             await message.react(`${emoji[i]}`);
         }
 
         // Third choice
-        console.log("About to try and receive the third choice");
         choice = await this.getChoice(3, message);
-        console.log("Received " + choice);
         choices.push(choiceList[choice]);
         var confirmMsg = new discord.RichEmbed()
             .setDescription("You chose <@" + playerList[choiceList[choice]].id + ">")
@@ -261,8 +248,6 @@ class GameService {
     async getChoice(num, message) {
         var maxChoice;
         var choice;
-
-        console.log("Getting choice " + num);
         
         switch (num) {
             case 1:
@@ -277,24 +262,19 @@ class GameService {
             default:
                 break;
         }
-        
-        console.log("Max choice is " + maxChoice);
 
         var validEmoji = emoji.slice(1, maxChoice+1);
-        console.log("Valid emoji: " + validEmoji);
 
         // Await reactions
         const filter = (reaction, user) => validEmoji.includes(reaction.emoji.name) && !user.bot;
-        console.log("Awaiting reaction");
 
         await message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
             .then(collected => {
                 choice = emoji.indexOf(collected.first().emoji.name);
-                console.log("Received a valid choice: " + choice);
             })
             .catch(collected => {
-                console.log("Choice timed out so going with 1");
-                choice = 1;
+                // If no choice after 60 seconds, choose randomly
+                choice = Math.ceil(Math.random() * maxChoice);
             });
         return choice;
     }

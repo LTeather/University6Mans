@@ -22,7 +22,7 @@ class ClearQueue extends commando.Command {
         }
         var [databaseService, gameService, queue, channels] = services;
         
-        if (!message.member.hasPermission("ADMINISTRATOR")  || !message.member.hasPermission('MANAGE_MESSAGES')) {
+        if (!message.member.hasPermission("MANAGE_ROLES")) {
             message.reply("Only admins/mods can use this command! Nice try... :wink:");
             return;
         }
