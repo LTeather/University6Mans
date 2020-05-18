@@ -252,16 +252,7 @@ class DatabaseService {
     async setMatchMMR(id, mmr) {
         const query = `UPDATE games set mmr='${mmr}' WHERE id='${id}'`;
         await this.pool.query(query);
-    }  
-
-
-    /**
-     * Updates a game with the mmr lost/gained.
-     */
-    async setMatchMMR(id, mmr) {
-        const query = `UPDATE games set mmr='${mmr}' WHERE id='${id}'`;
-        await this.pool.query(query);
-    }  
+    }
 
     /**
      * Gets the mmr lost/gained from a match.
