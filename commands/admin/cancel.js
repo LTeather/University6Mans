@@ -71,8 +71,13 @@ class CancelGame extends commando.Command {
             }
 
             else {
-                var team1_channel = message.guild.channels.find("name", "#" + args_better[0] + " - Team 1");
-                var team2_channel = message.guild.channels.find("name", "#" + args_better[0] + " - Team 2");
+                const team1_channel = message.guild.channels.find(c => c.name === "#" + args_better[0] + " - Team 1");
+                const team2_channel = message.guild.channels.find(c => c.name === "#" + args_better[0] + " - Team 2");
+                const waiting_room = team1_channel.parent.children.find(c => c.name === "Waiting Room");
+
+                for (var member of team1_channel.members.array().concat(team2_channel.members.array())) {
+                    await member.setVoiceChannel(waiting_room.id);
+                }
 
                 if(team1_channel != null && team2_channel != null) {
                     team1_channel.delete();
