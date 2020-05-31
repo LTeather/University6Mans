@@ -220,14 +220,14 @@ class ReportScore extends commando.Command {
             mmr_gain = 15
         }
         else {
-            mmr_gain = Math.round(14.5 - ((mmr_diff+100)*9)/200);
+            mmr_gain = Math.round(29.5 - ((mmr_diff+100)*19)/200);
 
-            // mmr_diff                                -100 to 100
-            // mmr_diff + 100                          0 to 200
-            // (mmr_diff + 100)*9                      0 to 1800
-            // ((mmr_diff + 100)*9)/200                0 to 9
-            // 14.5 - ((mmr_diff + 100)*9)/200         14.5 to 5.5
-            // round(14.5 - ((mmr_diff+100)*9)/200)    14 to 6
+            // mmr_diff                                 -100 to 100
+            // mmr_diff + 100                           0 to 200
+            // (mmr_diff + 100)*19                      0 to 3800
+            // ((mmr_diff + 100)*19)/200                0 to 19
+            // 29.5 - ((mmr_diff + 100)*19)/200         29.5 to 10.5
+            // round(29.5 - ((mmr_diff+100)*19)/200)    29 to 11
         }
 
         return mmr_gain;
@@ -239,12 +239,20 @@ class ReportScore extends commando.Command {
         const waiting_room = team1_channel.parent.children.find(c => c.name === "Waiting Room");
 
         for (var member of team1_channel.members.array().concat(team2_channel.members.array())) {
-            await member.setVoiceChannel(waiting_room.id);
+            try {
+                await member.setVoiceChannel(waiting_room.id);
+            }
+            catch (err) {
+                continue;
+            }
         }
 
-        if (team1_channel != null && team2_channel != null) {
-            team1_channel.delete();
-            team2_channel.delete();
+        if (team1_channel != null)
+        {
+            await team1_channel.delete();
+        }
+        if (team2_channel != null) {
+            await team2_channel.delete();
         }
     }
 }

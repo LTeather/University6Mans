@@ -27,16 +27,16 @@ class ResetLeaderboard extends commando.Command {
             return;
         }
         else {
-            await databaseService.SoftResetAllMMR();
+            await databaseService.ResetAllMmr();
             
             var clearReply = new discord.RichEmbed()
-            .addField("**Leaderboards Reset!**", "Welcome to the new month! Get queueing!")
+            .addField("**Leaderboards Hard Reset!**", "Welcome to the new month! Get queueing!")
             .setColor(adminColor)
             .setFooter(footer, footerImage)
     
             message.channel.send(clearReply);  
 
-            console.log('[Leaderboards] Leaderboard has been soft reset!');
+            console.log('[Leaderboards] Leaderboard has been hard reset!');
         }
     }
 }

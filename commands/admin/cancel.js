@@ -76,12 +76,20 @@ class CancelGame extends commando.Command {
                 const waiting_room = team1_channel.parent.children.find(c => c.name === "Waiting Room");
 
                 for (var member of team1_channel.members.array().concat(team2_channel.members.array())) {
-                    await member.setVoiceChannel(waiting_room.id);
+                    try {
+                        await member.setVoiceChannel(waiting_room.id);
+                    }
+                    catch (err) {
+                        continue;
+                    }
                 }
-
-                if(team1_channel != null && team2_channel != null) {
-                    team1_channel.delete();
-                    team2_channel.delete();
+        
+                if (team1_channel != null)
+                {
+                    await team1_channel.delete();
+                }
+                if (team2_channel != null) {
+                    await team2_channel.delete();
                 }
 
                 databaseService.removeMatch(args_better[0]);
