@@ -179,7 +179,7 @@ class ReportScore extends commando.Command {
             winningTeam[i].total_wins += 1;
             // Update losing team stats
             losingTeam[i].mmr -= mmr_gain;
-            losingTeam[i].streak = calculateStreak(winningTeam[i].streak, -1);
+            losingTeam[i].streak = calculateStreak(losingTeam[i].streak, -1);
             losingTeam[i].gp += 1;
             losingTeam[i].loss += 1;
             losingTeam[i].total_gp += 1;
