@@ -82,7 +82,7 @@ class ReportScore extends commando.Command {
             isValid = false;
         }
 
-        else if (!(result == "win" || result == "loss")) {
+        else if (!(result == "win" || result == "loss" || result == "w" || result == "l")) {
             error = "There has been an error finding the winning team for this game. Please try again!";
             isValid = false;
         }
