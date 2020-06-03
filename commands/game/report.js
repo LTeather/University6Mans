@@ -93,7 +93,7 @@ class ReportScore extends commando.Command {
         var gameWinner = 0;
         // If the person who reported is on team 1
         if (team1.includes(authorId)) {
-            if (result == "win") {
+            if (result == "win" || result == "w") {
                 gameWinner = 1;
             }
             else {
@@ -102,7 +102,7 @@ class ReportScore extends commando.Command {
         }
 
         else if (team2.includes(authorId)){
-            if (result == "win") {
+            if (result == "win" || result == "w") {
                 gameWinner = 2;
             }
             else {
