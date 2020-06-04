@@ -149,40 +149,6 @@ async function ConfigureBot(bot, config, sixMansInstances) {
         }
     });
 
-    bot.on('raw', event => { 
-        const eventName = event.t;
-        if(eventName === 'MESSAGE_REACTION_ADD') {
-            if(event.d.message_id === '641718720955154432' || event.d.message_id === '672793310665900041' || event.d.message_id === '664229875984629770' || event.d.message_id === '672801652691959808') {
-                var reactionChannel = bot.channels.get(event.d.channel_id);
-                if(reactionChannel.messages.has(event.d.message_id)) { return }
-                else {
-                    reactionChannel.fetchMessage(event.d.message_id)
-                    .then(msg => {
-                        var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
-                        var user = bot.users.get(event.d.user_id);
-                        clientInformation.emit('messageReactionAdd', msgReaction, user);
-                    })
-                    .catch(err => console.log(err));
-                }
-            }
-        }
-        else if(eventName === 'MESSAGE_REACTION_REMOVE') {
-            if(event.d.message_id === '641718720955154432' || event.d.message_id === '672793310665900041' || event.d.message_id === '664229875984629770' || event.d.message_id === '672801652691959808') {
-                var reactionChannel = bot.channels.get(event.d.channel_id);
-                if(reactionChannel.messages.has(event.d.message_id)) { return }
-                else {
-                    reactionChannel.fetchMessage(event.d.message_id)
-                    .then(msg => {
-                        var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
-                        var user = bot.users.get(event.d.user_id);
-                        clientInformation.emit('messageReactionRemove', msgReaction, user);
-                    })
-                    .catch(err => console.log(err));
-                }
-            }
-        }
-    });
-
     bot.on('messageReactionAdd', async function (messageReaction, user) { 
         var roleName      = messageReaction.emoji.name;
 
