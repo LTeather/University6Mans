@@ -133,7 +133,7 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                     bot.channels.get('672100901447663617').send("__**New Rank S Request!**__\n" + message.author + "\n" + message.content);
                     message.delete();
                     message.author.sendMessage("__**YOUR RANK S HAS BEEN SENT!**__\n\nThank you for applying for Rank S. We will give you a response on our decision within 24 hours!");
-                    console.log('[Rank S Request] Successful request by user: ' + message.author.id);
+                    console.log('[Rank S Request] Successful request by user: ' + message.author.tag + " (" + message.author.id + ")");
                     break;
                 }
 
@@ -141,11 +141,45 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                 if(!message.content.includes('https://rocketleague.tracker.network/profile/')) {
                     message.delete();
                     message.author.sendMessage("__**YOUR RANK S REQUEST DID NOT SEND!**__\n\nPlease make sure that you've included your Rocket League tracker link in the message (<https://rocketleague.tracker.network/profile/>)");
-                    console.log('[Rank S Request] Failed request by user: ' + message.author.id);
+                    console.log('[Rank S Request] Failed request by user: ' + message.author.tag + " (" + message.author.id + ")");
                     break;
                 }            
             }
             
+        }
+    });
+
+    bot.on('raw', event => { 
+        const eventName = event.t;
+        if(eventName === 'MESSAGE_REACTION_ADD') {
+            if(event.d.message_id === '641718720955154432' || event.d.message_id === '672793310665900041' || event.d.message_id === '664229875984629770' || event.d.message_id === '672801652691959808') {
+                var reactionChannel = bot.channels.get(event.d.channel_id);
+                if(reactionChannel.messages.has(event.d.message_id)) { return }
+                else {
+                    reactionChannel.fetchMessage(event.d.message_id)
+                    .then(msg => {
+                        var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                        var user = bot.users.get(event.d.user_id);
+                        bot.emit('messageReactionAdd', msgReaction, user);
+                    })
+                    .catch(err => console.log(err));
+                }
+            }
+        }
+        else if(eventName === 'MESSAGE_REACTION_REMOVE') {
+            if(event.d.message_id === '641718720955154432' || event.d.message_id === '672793310665900041' || event.d.message_id === '664229875984629770' || event.d.message_id === '672801652691959808') {
+                var reactionChannel = bot.channels.get(event.d.channel_id);
+                if(reactionChannel.messages.has(event.d.message_id)) { return }
+                else {
+                    reactionChannel.fetchMessage(event.d.message_id)
+                    .then(msg => {
+                        var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                        var user = bot.users.get(event.d.user_id);
+                        bot.emit('messageReactionRemove', msgReaction, user);
+                    })
+                    .catch(err => console.log(err));
+                }
+            }
         }
     });
 
@@ -162,28 +196,28 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(UKPlayerRole);
-                    console.log('[Reaction Roles] UK Player role added to: ' + user.id);
+                    console.log('[Reaction Roles] UK Player role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇪🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(EUPlayerRole);
-                    console.log('[Reaction Roles] EU Player role added to: ' + user.id);
+                    console.log('[Reaction Roles] EU Player role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇺🇸') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(NAPlayerRole);
-                    console.log('[Reaction Roles] NA Player role added to: ' + user.id);
+                    console.log('[Reaction Roles] NA Player role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇦🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(OCEPlayerRole);
-                    console.log('[Reaction Roles] OCE Player role added to: ' + user.id);
+                    console.log('[Reaction Roles] OCE Player role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }  
         }
@@ -197,28 +231,28 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(RSPingRole);
-                    console.log('[Reaction Roles] Rank S Ping role added to: ' + user.id);
+                    console.log('[Reaction Roles] Rank S Ping role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇪🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(EUPingRole);
-                    console.log('[Reaction Roles] EU Ping role added to: ' + user.id);
+                    console.log('[Reaction Roles] EU Ping role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇺🇸') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(NAPingRole);
-                    console.log('[Reaction Roles] NA Ping role added to: ' + user.id);
+                    console.log('[Reaction Roles] NA Ping role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇦🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.addRole(OCEPingRole);
-                    console.log('[Reaction Roles] OCE Ping role added to: ' + user.id);
+                    console.log('[Reaction Roles] OCE Ping role added to: ' + user.tag + " (" + user.id + ")");
                 }
             }
         }        
@@ -237,28 +271,28 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(UKPlayerRole);
-                    console.log('[Reaction Roles] UK Player role removed from: ' + user.id);
+                    console.log('[Reaction Roles] UK Player role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇪🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(EUPlayerRole);
-                    console.log('[Reaction Roles] EU Player role removed from: ' + user.id);
+                    console.log('[Reaction Roles] EU Player role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇺🇸') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(NAPlayerRole);
-                    console.log('[Reaction Roles] NA Player role removed from: ' + user.id);
+                    console.log('[Reaction Roles] NA Player role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇦🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(OCEPlayerRole);
-                    console.log('[Reaction Roles] OCE Player role removed from: ' + user.id);
+                    console.log('[Reaction Roles] OCE Player role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }   
         }
@@ -272,28 +306,28 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(RSPingRole);
-                    console.log('[Reaction Roles] Rank S Ping role removed from: ' + user.id);
+                    console.log('[Reaction Roles] Rank S Ping role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇪🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(EUPingRole);
-                    console.log('[Reaction Roles] EU Ping role removed from: ' + user.id);
+                    console.log('[Reaction Roles] EU Ping role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇺🇸') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(NAPingRole);
-                    console.log('[Reaction Roles] NA Ping role removed from: ' + user.id);
+                    console.log('[Reaction Roles] NA Ping role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
             if(roleName === '🇦🇺') {
                 var member = messageReaction.message.guild.members.find(member => member.id === user.id);
                 if(member) {
                     member.removeRole(OCEPingRole);
-                    console.log('[Reaction Roles] OCE Ping role removed from: ' + user.id);
+                    console.log('[Reaction Roles] OCE Ping role removed from: ' + user.tag + " (" + user.id + ")");
                 }
             }
         }        
