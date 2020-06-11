@@ -52,7 +52,7 @@ async function Main(config) {
     global.embedColor2 = 0xFFC800;
     global.embedColor3 = 0x00BFE9;
     global.adminColor  = 0xFF0000;
-    global.footer      = "6Mans bot created by Doppla.";
+    global.footer      = "6Mans bot created by Doppla, maintained by Joel";
     global.footerImage = "https://i.imgur.com/M1maY8U.png";
 
     var server = app.listen(process.env.PORT || 1337, function () { });
@@ -105,6 +105,7 @@ async function ConfigureBot(bot, config, sixMansInstances) {
     bot.on('ready', async function () {
         console.log('UK University 6Mans Discord Bot');
         console.log('Made by: Doppla');
+        console.log('Maintained by: Joel');
 
         let myGuild = bot.guilds.get(config.Server.ServerId);
         let memberCount = myGuild.memberCount;
