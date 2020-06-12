@@ -214,10 +214,10 @@ class ReportScore extends commando.Command {
         // Larger negative diff means W much weaker than L
 
         if (mmr_diff >= 100) {
-            mmr_gain = 5
+            mmr_gain = 10
         }
         else if (mmr_diff <= -100) {
-            mmr_gain = 15
+            mmr_gain = 30
         }
         else {
             mmr_gain = Math.round(29.5 - ((mmr_diff+100)*19)/200);
