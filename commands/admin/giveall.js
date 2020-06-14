@@ -40,7 +40,8 @@ class GiveAll extends commando.Command {
             await message.channel.send(reply);
 
             var members = message.guild.members.filter(m => !m.user.bot).array();
-            for (var i = 0; i < members.length; ++i) {
+            for (var i = 0; i < members.length; ++i) {                
+                await new Promise(r => setTimeout(r, 1000));
                 var member = members[i];
                 console.log(`Checking ${member.user.tag}`)
                 if (member.roles.has(UKRole.id) || member.roles.has(EURole.id)) {
