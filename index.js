@@ -133,14 +133,14 @@ async function ConfigureBot(bot, config, sixMansInstances) {
         }
 
         if(message.channel.id == '664229350316703744') {
-            if (!message.member.bot) {
+            if (!message.author.bot) {
                 if (!(message.content.includes('!mute') || message.content.includes('!unmute'))) {
                     await message.delete();
                     var reply = await message.channel.send("Incorrect usage.");
                     await new Promise(r => setTimeout(r, 2000));
                     await reply.delete();
-                }            
-            }
+                }        
+            }    
         }
 
         for (var i = 0; i < sixMansInstances.length; i++){
