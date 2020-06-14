@@ -117,6 +117,30 @@ async function ConfigureBot(bot, config, sixMansInstances) {
 
     // Apply settings based on channels as opposed to commands.
     bot.on('message', async function (message) {
+        if(message.channel.id == '672145903343370250' || message.channel.id == '672133504145948717') {
+            //if the message contains the link
+            if(message.content.includes('https://rocketleague.tracker.network/profile/')) {
+                bot.channels.get('672100901447663617').send("__**New Rank S Request!**__\n" + message.author + "\n" + message.content);
+                message.delete();
+                message.author.sendMessage("__**YOUR RANK S HAS BEEN SENT!**__\n\nThank you for applying for Rank S. We will give you a response on our decision within 24 hours!");
+                console.log('[Rank S Request] Successful request by user: ' + message.author.tag + " (" + message.author.id + ")");
+            }
+            else {
+                message.delete();
+                message.author.sendMessage("__**YOUR RANK S REQUEST DID NOT SEND!**__\n\nPlease make sure that you've included your Rocket League tracker link in the message (<https://rocketleague.tracker.network/profile/>)");
+                console.log('[Rank S Request] Failed request by user: ' + message.author.tag + " (" + message.author.id + ")");
+            }            
+        }
+
+        if(message.channel.id == '664229350316703744') {
+            if (!(message.content.includes('!mute') || message.content.includes('!unmute'))) {
+                await message.delete();
+                var reply = await message.channel.send("Incorrect usage.");
+                await new Promise(r => setTimeout(r, 2000));
+                await reply.delete();
+            }            
+        }
+
         for (var i = 0; i < sixMansInstances.length; i++){
             var instance = sixMansInstances[i];
             if (message.channel.id == instance.channels.report) {
@@ -126,27 +150,7 @@ async function ConfigureBot(bot, config, sixMansInstances) {
                         break;
                     }
                 }
-            }
-            
-            if(message.channel.id == '672145903343370250' || message.channel.id == '672133504145948717') {
-                //if the message contains the link
-                if(message.content.includes('https://rocketleague.tracker.network/profile/')) {
-                    bot.channels.get('672100901447663617').send("__**New Rank S Request!**__\n" + message.author + "\n" + message.content);
-                    message.delete();
-                    message.author.sendMessage("__**YOUR RANK S HAS BEEN SENT!**__\n\nThank you for applying for Rank S. We will give you a response on our decision within 24 hours!");
-                    console.log('[Rank S Request] Successful request by user: ' + message.author.tag + " (" + message.author.id + ")");
-                    break;
-                }
-
-                //If message doesn't contain the needed link
-                if(!message.content.includes('https://rocketleague.tracker.network/profile/')) {
-                    message.delete();
-                    message.author.sendMessage("__**YOUR RANK S REQUEST DID NOT SEND!**__\n\nPlease make sure that you've included your Rocket League tracker link in the message (<https://rocketleague.tracker.network/profile/>)");
-                    console.log('[Rank S Request] Failed request by user: ' + message.author.tag + " (" + message.author.id + ")");
-                    break;
-                }            
-            }
-            
+            }            
         }
     });
 
