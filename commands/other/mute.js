@@ -38,8 +38,8 @@ class Mute extends commando.Command {
         else {
             var reply = await message.channel.send("Incorrect role. Options are: `EU`, `NA`, `S`");
         }
-        await new Promise(r => setTimeout(r, 3000));
         await message.delete();
+        await new Promise(r => setTimeout(r, 3000));
         await reply.delete();
     }
 }
