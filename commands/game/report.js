@@ -213,22 +213,16 @@ class ReportScore extends commando.Command {
         // Larger positive diff means W much stronger than L
         // Larger negative diff means W much weaker than L
 
-        if (mmr_diff >= 100) {
-            mmr_gain = 10
-        }
-        else if (mmr_diff <= -100) {
-            mmr_gain = 30
-        }
-        else {
-            mmr_gain = Math.round(29.5 - ((mmr_diff+100)*19)/200);
+        mmr_gain = Math.round(29.5 - ((mmr_diff+100)*19)/200);
 
-            // mmr_diff                                 -100 to 100
-            // mmr_diff + 100                           0 to 200
-            // (mmr_diff + 100)*19                      0 to 3800
-            // ((mmr_diff + 100)*19)/200                0 to 19
-            // 29.5 - ((mmr_diff + 100)*19)/200         29.5 to 10.5
-            // round(29.5 - ((mmr_diff+100)*19)/200)    29 to 11
-        }
+        // mmr_diff                                 -100 to 100
+        // mmr_diff + 100                           0 to 200
+        // (mmr_diff + 100)*19                      0 to 3800
+        // ((mmr_diff + 100)*19)/200                0 to 19
+        // 29.5 - ((mmr_diff + 100)*19)/200         29.5 to 10.5
+        // round(29.5 - ((mmr_diff+100)*19)/200)    29 to 11
+
+        mmr_gain = Math.min(26, Math.max(14, mmr_gain));
 
         return mmr_gain;
     }
