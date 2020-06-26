@@ -34,6 +34,10 @@ class GameService {
         this.bot = bot;
     }
 
+    async LogGame(embed) {
+        await this.discordService.LogGame(embed);
+    }
+
     /**
      * Creates a game for the given vote.
      */

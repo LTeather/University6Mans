@@ -37,7 +37,7 @@ async function Main(config) {
     var sixMansInstances = [];
     // Create all SixMansInstances.
     for (var i = 0; i < instancesConfiguration.length; i++) {
-        var newInstance = await CreateSixMansInstance(instancesConfiguration[i], bot);
+        var newInstance = await CreateSixMansInstance(instancesConfiguration[i], bot, config.Server.ServerId);
         sixMansInstances.push(newInstance);
     }
     // Create global service.
@@ -61,11 +61,11 @@ async function Main(config) {
 /**
  * Creates an instance of a SixMansInstance from configuration
  */
-async function CreateSixMansInstance(config, bot) {
+async function CreateSixMansInstance(config, bot, serverId) {
     // Setup Voice channel settings
     var voiceChannelSettings = new VoiceChannelSettings(config.CategoryId);
     // Create Discord service
-    var discordService = new DiscordService(bot, voiceChannelSettings);
+    var discordService = new DiscordService(bot, voiceChannelSettings, serverId);
     // Create Database Service
     var pool = await mysql.createPool(config.Database);
     var databaseService = new DatabaseService(pool);

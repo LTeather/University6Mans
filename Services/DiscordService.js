@@ -4,9 +4,10 @@ require('discord.js');
  * Handles all commands relating to the discord API.
  */
 class DiscordService {
-    constructor(bot, voiceChannelSettings) {
+    constructor(bot, voiceChannelSettings, serverId) {
         this.bot = bot;
         this.voiceChannelSettings = voiceChannelSettings;
+        this.serverId = serverId;
     }
 
     /**
@@ -38,6 +39,12 @@ class DiscordService {
     async SendDirectMessage(userId, text) {
         var user = await this.bot.fetchUser(userId, false);
         return user.send(text);
+    }
+
+    async LogGame(embed) {
+        var guild = this.bot.guilds.get(this.serverId);
+        var channel = guild.channels.find(c => c.name === "game-logs");
+        channel.send(embed);
     }
 }
 module.exports = DiscordService;

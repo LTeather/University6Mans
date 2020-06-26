@@ -58,7 +58,7 @@ class ReportScore extends commando.Command {
                 return;
             }
             // Then do all the reporting logic.
-            var mmr_gain = await this.reportGame(databaseService, game, gameWinner);
+            var mmr_gain = await this.reportGame(databaseService, gameService, game, gameWinner);
             // Delete the left over voice channels.
             this.deleteVoiceChannels(gameId, message);
             // Output report message to the user.
@@ -112,7 +112,7 @@ class ReportScore extends commando.Command {
         return gameWinner;
     }
 
-    async reportGame(databaseService, game, gameWinner) {
+    async reportGame(databaseService, gameService, game, gameWinner) {
         // Find the winner
         var team1 = game.team1.split(",");
         var team2 = game.team2.split(",");
@@ -157,6 +157,30 @@ class ReportScore extends commando.Command {
 
         // Calculate mmr
         var mmr_gain = this.calculateMmr(mmr_diff)
+        // Log to #game-logs
+        var winningMsg = "";
+        var losingMsg = "";
+        for (var i = 0; i < winningTeam.length; ++i) {
+            winningMsg += `<@${winningTeam[i].discordID}> ${winningTeam[i].mmr} -> ${winningTeam[i].mmr + mmr_gain} (+${mmr_gain})\n`;
+        }
+        for (var i = 0; i < losingTeam.length; ++i) {
+            losingMsg += `<@${losingTeam[i].discordID}> ${losingTeam[i].mmr} -> ${losingTeam[i].mmr - mmr_gain} (-${mmr_gain})\n`;
+        }
+        if (gameWinner == 1) {
+            var Team1Results = winningMsg;
+            var Team2Results = losingMsg;
+        }
+        else {
+            var Team1Results = losingMsg;
+            var Team2Results = winningMsg;
+        }
+        var logMsg = new discord.RichEmbed()
+            .setTitle(`Match ${game.id} has been reported!`)
+            .addField("Team 1", Team1Results)
+            .addField("Team 2", Team2Results)
+            .setColor(embedColor)
+            .setFooter(footer, footerImage)
+        await gameService.LogGame(logMsg);
         // Update stats for all the players in the lobby.
         await this.UpdatePlayerStats(databaseService, winningTeam, losingTeam, mmr_gain);
         // Update game.
