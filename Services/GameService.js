@@ -2,6 +2,7 @@ const Game = require('../Model/Game');
 const Sub = require('../Model/Sub')
 const Commando = require('discord.js-commando');
 const discord = require('discord.js');
+const { order } = require('paypal-rest-sdk');
 
 const emoji = ["0⃣", "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣"];
 
@@ -111,18 +112,43 @@ class GameService {
         var team1 = [];
         var team2 = [];
 
-        // Choose the two captains at random
-        while (captains.length < 2) {
-            var rand = Math.floor(Math.random() * 6);
-            if (!captains.includes(rand)) {
-                captains.push(rand);
+        // Choose the two captains at random from the top 3        
+        var orderedPlayers = [];
+        var players = await this.databaseService.GetAllUsers(playerList);
+        if (players == null) {
+            throw "Couldn't retrieve players details";
+        } else {
+            for (var i = 0; i < players.length; ++i) {
+                orderedPlayers.push({ discordID: players[i].discordID, mmr: players[i].mmr });
             }
         }
+        this.SortMMR(orderedPlayers);
+        
+        // On dev, we will likely only have one person queueing. This means the sql query will only return 1 user.
+        // So lets fill it with users to make sure it has enough to run this code.
+        if(Environment == "Development") {
+            var noOfPlayers = orderedPlayers.length;
+            for(var i = 0; i<6-noOfPlayers; ++i) {
+                orderedPlayers.push(orderedPlayers[0])
+            }
+        }
+        
+        var available = [0, 1, 2];
+        var exclude = Math.floor(Math.random() * 3);
+        available = available.filter(item => item != exclude);
+        var lowerRank = Math.max(...available);
+        var higherRank = Math.min(...available);
+        var captain1 = orderedPlayers[lowerRank].discordID;
+        var captain2 = orderedPlayers[higherRank].discordID;
 
-        var captain1 = playerList[captains[0]].id;
-        var captain2 = playerList[captains[1]].id;
+        for (var i = 0; i < 6; i++) {
+            if (playerList[i].id == captain1 || playerList[i].id == captain2) {
+                captains.push(i);
+            }
+            if (captains.length > 1) {break;}
+        }
 
-        this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + ">\n\n**Team 2 Captain is:** <@" + captain2 + ">");
+        this.discordService.Send(message, "**Team 1 Captain is:** <@" + captain1 + "> (" + orderedPlayers[lowerRank].mmr + ")\n\n**Team 2 Captain is:** <@" + captain2 + "> (" + orderedPlayers[higherRank].mmr + ")");
 
         // Create list of 4 players
         var listNum = 1;
