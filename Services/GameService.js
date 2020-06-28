@@ -71,7 +71,7 @@ class GameService {
                 orderedPlayers.push({ discordID: players[i].discordID, mmr: players[i].mmr });
             }
         }
-        this.SortMMR(orderedPlayers);
+        orderedPlayers = this.SortMMR(orderedPlayers);
         return this.CreateBalancedTeams(orderedPlayers);
     }
 
@@ -122,7 +122,7 @@ class GameService {
                 orderedPlayers.push({ discordID: players[i].discordID, mmr: players[i].mmr });
             }
         }
-        this.SortMMR(orderedPlayers);
+        orderedPlayers = this.SortMMR(orderedPlayers);
         
         // On dev, we will likely only have one person queueing. This means the sql query will only return 1 user.
         // So lets fill it with users to make sure it has enough to run this code.
@@ -384,11 +384,7 @@ class GameService {
      * Sorts players by mmr
      */
     SortMMR(balancedmmr) {
-        balancedmmr.sort((a, b) => {
-            if (a.mmr > b.mmr) { return 1; }
-            else if (a.mmr == b.mmr) { return 0; }
-            else { return -1; }
-        });
+        balancedmmr.sort((a, b) => { return b.mmr - a.mmr });
         return balancedmmr;
     }
 
