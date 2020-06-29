@@ -25,7 +25,7 @@ class JoinGame extends Commando.Command {
 
         if(message.channel.id == channels.queue) {
             // Try add user to the queue
-            var[success, error] = queue.TryAddToQueue(message.author) 
+            var[success, error] = queue.TryAddToQueue(message.author, message.channel);
             if(!success) {
                 message.reply(error);
                 return;
@@ -45,11 +45,11 @@ class JoinGame extends Commando.Command {
                 .setColor(embedColor2)
                 .setFooter(footer, footerImage)
 
-            message.channel.send(queueReply);
+            await message.channel.send(queueReply);
 
             if (queue.length == 6) {
                 queue.BeginVoting();
-                message.channel.send("**THE QUEUE IS FULL! VOTING STARTING!**\n\nPlayers: " + queueString + "\n\nUse **!r** to pick random teams\nUse **!b** to pick balanced teams\nUse **!c** to pick captains");
+                await message.channel.send("**THE QUEUE IS FULL! VOTING STARTING!**\n\nPlayers: " + queueString + "\n\nUse **!r** to pick random teams\nUse **!b** to pick balanced teams\nUse **!c** to pick captains");
             }
         }
     }

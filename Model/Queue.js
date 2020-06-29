@@ -1,3 +1,4 @@
+const discord = require('discord.js');
 /**
  * Handles the creation and completion of games.
  */
@@ -9,13 +10,15 @@ class Queue {
         this.votes = [];
         this.hasVoted = [];
         this.isVoting = false;
+        
+        this.timeouts = [];
     }
 
     /**
      * Trys to add a player to the queue. Returns a tuple of [success, errorMessage]
      * success = True/False , errorMessage is error if fails.
      */
-    TryAddToQueue(player) {
+    TryAddToQueue(player, channel) {
         if (this.queue.length == 6) {
             var message = "Please wait until voting has complete to join the queue!";
             return [false, message];
@@ -28,7 +31,28 @@ class Queue {
             }
         }
         this.queue.push(player);
+        // Start timeout
+        this.timeouts.push(setTimeout(() => {this.QueueTimeout(player, channel)}, 3600000));
         return [true, null];
+    }
+
+    QueueTimeout(player, channel) {
+        var[success, error] = this.TryRemoveFromQueue(player);
+        if(!success) {
+            channel.send(player + " " + error);
+            return;
+        }
+
+        var queueString = this.toDiscordString();
+
+        var leaveMsg = new discord.RichEmbed()
+            .addField("Player left the queue", player + " was in the queue too long and has been removed.")
+            .addField("Players in queue: " + this.length, queueString)
+            .setColor(embedColor2)
+            .setFooter(footer, footerImage);
+
+        channel.send(player + " you've been in the queue for over an hour! Type !q if you still want to play.");
+        channel.send(leaveMsg);
     }
 
     /**
@@ -41,7 +65,7 @@ class Queue {
             return [false, message];
         }
         if (this.queue.length == 6) {
-            var message = "You cannot leave when the queue is full. Please contact an admin to cancel the game. " +
+            var message = "You cannot leave when the queue is full. Please contact an admin to cancel the game once voting is complete. " +
                 "Please remember that queue dodging is against the rules and is subject to bans.";
             return [false, message];
         }
@@ -68,6 +92,15 @@ class Queue {
         }
         // If the player is in the queue.
         if (this.queue.includes(player)) {
+            if (this.votes.length == 5) {
+                var [b_count, r_count, c_count] = this.GetVoteCounts();
+                if ((vote == "b" && b_count < 2) || (vote == "r" && r_count < 2) || (vote == "c" && c_count < 2)) {
+                    return [false, "Invalid voting option. Please vote for one of the options with 2 votes already.\n\n" +
+                                    `Random count: **${r_count}**\n` +
+                                    `Balanced count: **${b_count}**\n` +
+                                    `Captains count: **${c_count}**`];
+                }
+            }
             // On development, let us vote as many times as we like.
             if (Environment == "Development") {
                 this.votes.push(vote);
@@ -91,14 +124,10 @@ class Queue {
         return [true, null];
     }
 
-    /**
-     * Internal Use. Called when a vote is recorded. Ends voting if the threshold of votes has been reached.
-     * Returns [ended:bool, vote:char, players:player[] ]
-     */
-    TryEndVoting() {
+    GetVoteCounts() {
         var b_count = 0;
-        var c_count = 0;
         var r_count = 0;
+        var c_count = 0;
 
         // Count the number of votes for balanced or random
         for (var i = 0; i < this.votes.length; ++i) {
@@ -113,24 +142,34 @@ class Queue {
                     c_count++;
                     break;
             }
-
         }
+
+        return [b_count, r_count, c_count];
+    }
+
+    /**
+     * Internal Use. Called when a vote is recorded. Ends voting if the threshold of votes has been reached.
+     * Returns [ended:bool, vote:char, players:player[] ]
+     */
+    TryEndVoting() {
+        var [b_count, r_count, c_count] = this.GetVoteCounts();
 
         // If enough votes, end voting.
         if (b_count == 3) {
             var vote = "b";
         }
-
         else if (r_count == 3) {
             var vote = "r";
         }
-
         else if (c_count == 3) {
             var vote = "c";
         }
         else {
             // If 2 of each type, remove the last vote
-            if (this.votes.length == 6) this.votes.pop()
+            // Shouldn't ever reach this point
+            if (this.votes.length == 6) {
+                this.votes.pop();
+            }
             return [false, null, null];
         }
         var players = this.queue.slice();
@@ -144,6 +183,11 @@ class Queue {
      */
     BeginVoting() {
         this.isVoting = true;
+        // Clear timeouts
+        for (var i = 0; i < this.timeouts.length; i++) {
+            clearTimeout(this.timeouts[i]);
+        }
+        this.timeouts = [];
     }
 
     /**

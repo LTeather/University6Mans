@@ -63,7 +63,7 @@ class ReportScore extends commando.Command {
             this.deleteVoiceChannels(gameId, message);
             // Output report message to the user.
             var reportReply = new discord.RichEmbed()
-                .addField(`Match complete! (Match ID #${game.id} )`, `Team ${gameWinner} has won! Score reported.`)
+                .addField(`Match complete! (Match ID #${game.id})`, `Team ${gameWinner} has won! Score reported.`)
                 .addField("MMR Gain/Loss", "+/- **" + mmr_gain + "**")
                 .setColor(embedColor3)
                 .setFooter(footer, footerImage)
