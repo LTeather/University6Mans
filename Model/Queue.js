@@ -11,7 +11,7 @@ class Queue {
         this.hasVoted = [];
         this.isVoting = false;
         
-        this.timeouts = [];
+        this.timeouts = new Map();
     }
 
     /**
@@ -32,7 +32,7 @@ class Queue {
         }
         this.queue.push(player);
         // Start timeout
-        this.timeouts.push(setTimeout(() => {this.QueueTimeout(player, channel)}, 3600000));
+        this.timeouts.set(player.id, setTimeout(() => {this.QueueTimeout(player, channel)}, 3600000));
         return [true, null];
     }
 
@@ -75,7 +75,9 @@ class Queue {
                 newList.push(this.queue[i]);
             }
         }
-
+        
+        clearTimeout(this.timeouts.get(player.id));
+        this.timeouts.delete(player.id);
         this.queue = newList;
         return [true, null];
     }
@@ -184,10 +186,10 @@ class Queue {
     BeginVoting() {
         this.isVoting = true;
         // Clear timeouts
-        for (var i = 0; i < this.timeouts.length; i++) {
-            clearTimeout(this.timeouts[i]);
+        for (let value of this.timeouts.values()) {
+            clearTimeout(value);
         }
-        this.timeouts = [];
+        this.timeouts = new Map();
     }
 
     /**
