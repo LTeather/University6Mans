@@ -39,7 +39,7 @@ class Queue {
     QueueTimeout(player, channel) {
         var[success, error] = this.TryRemoveFromQueue(player);
         if(!success) {
-            channel.send(player + " " + error);
+            console.log("Error on timeout: " + player.tag + " " + error);
             return;
         }
 
