@@ -200,6 +200,11 @@ class Queue {
         this.hasVoted = [];
         this.isVoting = false;
         this.queue = [];
+        // Clear timeouts
+        for (let value of this.timeouts.values()) {
+            clearTimeout(value);
+        }
+        this.timeouts = new Map();
     }
 
     /**
