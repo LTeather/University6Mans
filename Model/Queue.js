@@ -51,7 +51,7 @@ class Queue {
             .setColor(embedColor2)
             .setFooter(footer, footerImage);
 
-        channel.send(player + " you've been in the queue for over an hour! Type !q if you still want to play.");
+        channel.send(player + " you've been in the queue for over an hour!\nType !q if you still want to play.");
         channel.send(leaveMsg);
     }
 

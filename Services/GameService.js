@@ -129,7 +129,7 @@ class GameService {
         if(Environment == "Development") {
             var noOfPlayers = orderedPlayers.length;
             for(var i = 0; i<6-noOfPlayers; ++i) {
-                orderedPlayers.push(orderedPlayers[0])
+                orderedPlayers.push(orderedPlayers[0]);
             }
         }
         
@@ -140,6 +140,9 @@ class GameService {
         var higherRank = Math.min(...available);
         var captain1 = orderedPlayers[lowerRank].discordID;
         var captain2 = orderedPlayers[higherRank].discordID;
+        console.log(orderedPlayers);
+        console.log("Exclude " + exclude);
+        console.log("Available " + available);
 
         for (var i = 0; i < 6; i++) {
             if (playerList[i].id == captain1 || playerList[i].id == captain2) {
