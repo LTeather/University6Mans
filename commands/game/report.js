@@ -167,17 +167,25 @@ class ReportScore extends commando.Command {
             losingMsg += `<@${losingTeam[i].discordID}> ${losingTeam[i].mmr} -> ${losingTeam[i].mmr - mmr_gain} (-${mmr_gain})\n`;
         }
         if (gameWinner == 1) {
+            var Team1Average = winningTeam_avg;
+            var Team1AverageAfter = winningTeam_avg + mmr_gain;
+            var Team2Average = losingTeam_avg;
+            var Team2AverageAfter = losingTeam_avg - mmr_gain;
             var Team1Results = winningMsg;
             var Team2Results = losingMsg;
         }
         else {
+            var Team1Average = losingTeam_avg;
+            var Team1AverageAfter = losingTeam_avg - mmr_gain;
+            var Team2Average = winningTeam_avg;
+            var Team2AverageAfter = winningTeam_avg + mmr_gain;
             var Team1Results = losingMsg;
             var Team2Results = winningMsg;
         }
         var logMsg = new discord.RichEmbed()
             .setTitle(`Match ${game.id} has been reported!`)
-            .addField("Team 1", Team1Results)
-            .addField("Team 2", Team2Results)
+            .addField(`Team 1 (Average ${Team1Average} -> ${Team1AverageAfter})`, Team1Results)
+            .addField(`Team 2 (Average ${Team2Average} -> ${Team2AverageAfter})`, Team2Results)
             .setColor(embedColor)
             .setFooter(footer, footerImage)
         await gameService.LogGame(logMsg);
