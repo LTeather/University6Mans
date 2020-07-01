@@ -157,6 +157,12 @@ class ReportScore extends commando.Command {
 
         // Calculate mmr
         var mmr_gain = this.calculateMmr(mmr_diff)
+
+        var winningTeam_avgStr = winningTeam_avg.toFixed(1);
+        var losingTeam_avgStr = losingTeam_avg.toFixed(1);
+        var winningTeam_avgAfterStr = (winningTeam_avg + mmr_gain).toFixed(1);
+        var losingTeam_avgAfterStr = (losingTeam_avg - mmr_gain).toFixed(1);
+
         // Log to #game-logs
         var winningMsg = "";
         var losingMsg = "";
@@ -167,18 +173,18 @@ class ReportScore extends commando.Command {
             losingMsg += `<@${losingTeam[i].discordID}> ${losingTeam[i].mmr} -> ${losingTeam[i].mmr - mmr_gain} (-${mmr_gain})\n`;
         }
         if (gameWinner == 1) {
-            var Team1Average = winningTeam_avg;
-            var Team1AverageAfter = winningTeam_avg + mmr_gain;
-            var Team2Average = losingTeam_avg;
-            var Team2AverageAfter = losingTeam_avg - mmr_gain;
+            var Team1Average = winningTeam_avgStr;
+            var Team1AverageAfter = winningTeam_avgAfterStr;
+            var Team2Average = losingTeam_avgStr;
+            var Team2AverageAfter = losingTeam_avgAfterStr;
             var Team1Results = winningMsg;
             var Team2Results = losingMsg;
         }
         else {
-            var Team1Average = losingTeam_avg;
-            var Team1AverageAfter = losingTeam_avg - mmr_gain;
-            var Team2Average = winningTeam_avg;
-            var Team2AverageAfter = winningTeam_avg + mmr_gain;
+            var Team1Average = losingTeam_avgStr;
+            var Team1AverageAfter = losingTeam_avgAfterStr;
+            var Team2Average = winningTeam_avgStr;
+            var Team2AverageAfter = winningTeam_avgAfterStr;
             var Team1Results = losingMsg;
             var Team2Results = winningMsg;
         }
