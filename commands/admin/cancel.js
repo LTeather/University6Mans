@@ -50,8 +50,8 @@ class CancelGame extends commando.Command {
                 return;
             }
 
-            if (!message.member.hasPermission("ADMINISTRATOR") || !message.member.hasPermission('MANAGE_MESSAGES')) {
-                message.reply("Only Admins can use this command! Nice try... :wink:");
+            if (!message.member.hasPermission("MANAGE_ROLES")) {
+                message.reply("Only admins/mods can use this command! Nice try... :wink:");
                 return;
             }
     

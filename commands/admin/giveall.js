@@ -19,7 +19,9 @@ class GiveAll extends commando.Command {
             message.reply("Only admins can use this command! Nice try... :wink:");
             return;
         }
-        else {            
+        else {     
+            message.reply("This command has been disabled");
+            return;       
             var EUPingRole = message.guild.roles.find(r => r.name == '6Mans Ping EU');
             var NAPingRole = message.guild.roles.find(r => r.name == '6Mans Ping NA');
             var RankSPingRole = message.guild.roles.find(r => r.name == 'Rank S Ping');

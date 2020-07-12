@@ -125,7 +125,7 @@ class FlipMatch extends commando.Command {
         await this.flipMatchWinner(databaseService, game);
 
         var flipReply = new discord.RichEmbed()
-        .addField("**Match flipped!** (Match ID #" + id + ")", "MMR has been given back to all players.")
+        .addField("**Match flipped!** (Match ID #" + id + ")", "The MMR for this game has been flipped.")
         .setColor(adminColor)
         .setFooter(footer, footerImage)
 

@@ -113,6 +113,8 @@ class Queue {
                 if (!this.hasVoted.includes(player)) {
                     this.votes.push(vote);
                     this.hasVoted.push(player);
+                    console.log(this.votes);
+                    console.log(this.hasVoted);
                 }
                 else {
                     return [false, "You have already voted!"];
@@ -185,6 +187,8 @@ class Queue {
      */
     BeginVoting() {
         this.isVoting = true;
+        this.votes = [];
+        this.hasVoted = [];
         // Clear timeouts
         for (let value of this.timeouts.values()) {
             clearTimeout(value);

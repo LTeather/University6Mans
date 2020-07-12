@@ -292,6 +292,24 @@ class DatabaseService {
         var [rows, _] = await this.pool.query(query);
 
         return rows;
-    }      
+    }
+
+    async getQueue() {
+        const query = "SELECT queue FROM misc";
+        var [rows, _] = await this.pool.query(query);
+
+        if(rows.length == 0) {
+            throw "Could not find queue";
+        }
+        if(rows.length > 1) {
+            throw "Found multiple queue rows in misc";
+        }
+        return rows[0].queue;
+    }
+
+    async saveQueue(queue) {
+        const query = "UPDATE misc SET queue=" + game.gameId.toString() + " WHERE 1";
+        await this.pool.query(query);
+    }
 }
 module.exports = DatabaseService;

@@ -33,6 +33,14 @@ class SixMansService {
         }
         return [sixMansInstance.databaseService, sixMansInstance.gameService, sixMansInstance.queue, sixMansInstance.channels];
     }
+
+    async SaveQueues() {
+        return;
+        for(var i = 0; i < this.sixMansInstances.length;i++) {
+            var instance = this.sixMansInstances[i];
+            await instance.databaseService.saveQueue(instance.queue);
+        }
+    }
 }
 
 module.exports = SixMansService;

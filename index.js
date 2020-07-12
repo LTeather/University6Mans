@@ -58,6 +58,12 @@ async function Main(config) {
     var server = app.listen(process.env.PORT || 1337, function () { });
 }
 
+process.on('SIGTERM', async () => {
+    console.log('Received SIGTERM.');
+    await global.sixMansService.saveQueues();
+    process.exit(0);
+});
+
 /**
  * Creates an instance of a SixMansInstance from configuration
  */
