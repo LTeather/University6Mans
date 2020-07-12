@@ -60,7 +60,7 @@ async function Main(config) {
 
 process.on('SIGTERM', async () => {
     console.log('Received SIGTERM.');
-    await global.sixMansService.saveQueues();
+    //await global.sixMansService.saveQueues();
     process.exit(0);
 });
 
