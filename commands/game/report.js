@@ -77,14 +77,19 @@ class ReportScore extends commando.Command {
     validCommand(gameId, result) {
         var error = null;
         var isValid = true;
+        const validScores = ["win", "loss", "w", "l", "dub"];
+
         if (gameId == null || result == null) {
             error = "Incorrect usage! - Usage: !report <match id> <win/loss>";
             isValid = false;
         }
 
-        else if (!(result == "win" || result == "loss" || result == "w" || result == "l")) {
-            error = "There has been an error finding the winning team for this game. Please try again!";
-            isValid = false;
+        else {
+            result = result.toLowerCase();
+            if (!(validScores.includes(result))) {
+                error = "There has been an error finding the winning team for this game. Please try again!";
+                isValid = false;
+            }
         }
         return [isValid, error];
     }
@@ -93,7 +98,7 @@ class ReportScore extends commando.Command {
         var gameWinner = 0;
         // If the person who reported is on team 1
         if (team1.includes(authorId)) {
-            if (result == "win" || result == "w") {
+            if (result == "win" || result == "w" || result == "dub") {
                 gameWinner = 1;
             }
             else {
@@ -102,7 +107,7 @@ class ReportScore extends commando.Command {
         }
 
         else if (team2.includes(authorId)){
-            if (result == "win" || result == "w") {
+            if (result == "win" || result == "w" || result == "dub") {
                 gameWinner = 2;
             }
             else {
