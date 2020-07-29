@@ -1,86 +1,209 @@
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Lato|Poppins&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/index.css" />
-    <script src="https://kit.fontawesome.com/87455b06e8.js" crossorigin="anonymous"></script>
-    <title>University 6Mans</title>
-  </head>
+	<head>
+		<title>University RL 6-Mans</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload landing">
+		<div id="page-wrapper">
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="http://university6mans.com/">University 6Mans</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto"> 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="leaderboardsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Leaderboards</a>
-              <div class="dropdown-menu" aria-labelledby="leaderboardsDropdown">
-                <a class="dropdown-item" href="/leaderboards/EU">EU</a>
-                <a class="dropdown-item" href="/leaderboards/NA">NA</a>
-                <a class="dropdown-item" href="/leaderboards/OCE">OCE</a>
-                <a class="dropdown-item" href="/leaderboards/RankS">Rank S</a>
-              </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="Supporters">Supporters</a>
-            </li>  
-            <li class="nav-item">
-                <a class="nav-link" href="Contact">Contact</a>
-            </li>             
-          </ul>
-          <!---<form class="form-inline my-2 my-lg-0">
-            <div class="login-btn">
-                <a href="/api/discord/login"><i class="fab fa-discord"></i> Login</a>
-            </div>
-          </form>--->
-        </div>
-      </nav>
+			<!-- Header -->
+				<header id="header">
+					<h1 id="logo"><a href="/">U6M</a></h1>
+					<nav id="nav">
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="#">Leaderboards</a>
+								<ul>
+									<li><a href="/leaderboards/EU">Europe</a></li>
+									<li><a href="/leaderboards/NA">North America</a></li>
+									<li><a href="/leaderboards/OCE">Oceania</a></li>
+									<li><a href="/leaderboards/RankS">Rank S</a></li>
+								</ul>
+							</li>
+							<li><a href="Supporters">Supporters</a></li>
+							<li><a href="Contact">Contact</a></li>
+							<li><a href="https://discord.gg/hu95nXR" class="button primary">Join Discord</a></li>
+						</ul>
+					</nav>
+				</header>
 
+			<!-- Banner -->
+				<section id="banner">
+					<div class="content">
+						<header>
+							<h2>University Rocket League 6 Mans</h2>
+							<p>It's like normal 6 Mans, but for University students.<br />
+							Join over <%= playerCount %> others today!</%></p>
+						</header>
+						<span class="image"><img src="images/6mans_new.png" alt="" /></span>
+					</div>
+					<a href="#intro" class="goto-next scrolly">Next</a>
+				</section>
 
-    <div class="header">
-        <div class="caption">
-            <h1>University 6Mans</h1>
-            <h4>The global hub of university based Rocket League scrimmages.</h4>
+			<!-- Intro -->
+				<section id="intro" class="spotlight style1 bottom">
+					<span class="image fit main"><img src="images/Random1.jpg" alt="" /></span>
+					<div class="content">
+						<div class="container">
+							<div class="row">
+								<div class="col-4 col-12-medium">
+									<header>
+										<h2>We also host a few tournaments!</h2>
+										<p>We're working toward making Random Roster tournaments- as well as others- a regular occurance.</p>
+									</header>
+								</div>
+								<div class="col-4 col-12-medium">
+									<p>U6M is more than just a random 6man start-up, its moreso a community
+									in which university and collegiate RL players can drop in and hang out.
+									In the discord server you can do pretty much anything a player would need
+									to do, promote a twitch stream, organise scrims, to name a few.</p>
+								</div>
+								<div class="col-4 col-12-medium">
+									<p>From starting the server just under a year ago, we've amassed a playerbase
+									of over 1000 players stretching over EU, NA and OCE (we plan to get to SAM and ASIA).
+									Awards like the <b>Hemi's</b> have popped up which turned out to be something we look
+									forward to every time a season passes!</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a href="#eu" class="goto-next scrolly">Next</a>
+				</section>
 
-            <h4 style="padding-top: 50px;">Join over <%= playerCount %> other players today!</h4>
-            <a href="https://discord.gg/hu95nXR"><button class="join-btn"><i class="fab fa-discord"></i> Join Server</button></a>
-        </div>
-    </div>
+			<!-- Europe -->
+				<section id="eu" class="spotlight style2 right">
+					<span class="image fit main"><img src="images/EU1.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Europe</h2>
+							<p>Our most active branch of the server. Here's all you need.</p>
+						</header>
+						<p>From our beggining as a bunch of UK NSE players, our next step was Europe.
+						Anyone thats eligible to play in EURC, can play here. Are you in university?
+						Are you in any European country (or the UK)? Come by.</p>
+						<ul class="actions">
+							<li><a href="/leaderboards/EU" class="button">EU Leaderboards</a></li>
+						</ul>
+					</div>
+					<a href="#na" class="goto-next scrolly">Next</a>
+				</section>
 
-    
-    <div class="leaderboard-menu">
-        <div class="container">
-            <h3>Select Your Region!</h3>
-            <div class="row">
-                <div class="col-sm-3">
-                    <a href="/leaderboards/EU"><img class="leaderboard-region-img" src="/img/EU.png" title="EU Leaderboards"></a>
-                </div>
-                <div class="col-sm-3">
-                    <a href="/leaderboards/NA"><img class="leaderboard-region-img" src="/img/NA.png" title="NA Leaderboards"></a>
-                </div>
-                <div class="col-sm-3">
-                    <a href="/leaderboards/OCE"><img class="leaderboard-region-img" src="/img/OCE.png" title="OCE Leaderboards"></a>
-                </div>
-                <div class="col-sm-3">
-                    <a href="/leaderboards/RankS"><img class="leaderboard-region-img" src="/img/RankS.png" title="Rank S Leaderboards"></a>
-                </div>
-            </div>
-        </div>
-    </div>
+			<!-- North America -->
+				<section id="na" class="spotlight style3 left">
+					<span class="image fit main bottom"><img src="images/Americas1.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>North America</h2>
+							<p>The inevitable. Most established Collegiate scene in the world.</p>
+						</header>
+						<p>Born from the depths of CCA, with the help of Bumney, Pulch and others we have
+						aquired the Americas onto our list of eligible players! We've had some EU vs NA brawls
+						already, lets keep the competitive play going.
+						:chair:</p>
+						<ul class="actions">
+							<li><a href="/leaderboards/NA" class="button">NA Leaderboards</a></li>
+						</ul>
+					</div>
+					<a href="#oce" class="goto-next scrolly">Next</a>
+				</section>
 
-    <footer>
-      <p class="text-center">University 6Mans Bot made by Doppla, maintained by Joel</p>
-    </footer>
+			<!-- Oceania -->
+				<section id="oce" class="spotlight style2 right">
+					<span class="image fit main"><img src="images/Oceania1.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Oceania</h2>
+							<p>The land down under. We dont get many of them, but thats because in our winter,
+							its their summer.</p>
+						</header>
+						<p>We genuinely don't have many players from Oceania, it may or may not be because of the weird
+						timing- but without a doubt we'd love some more. If you're a part of AEL Rocket League, make your way in
+						and make the region proud. OCE! OCE! OCE! OCE!</p>
+						<ul class="actions">
+							<li><a href="/leaderboards/OCE" class="button">OCE Leaderboards</a></li>
+						</ul>
+					</div>
+					<a href="#ranks" class="goto-next scrolly">Next</a>
+				</section>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
+			<!-- Rank S -->
+				<section id="ranks" class="spotlight style4 left">
+					<span class="image fit main"><img src="images/RankS1.jpg" alt="" /></span>
+					<div class="content">
+						<header>
+							<h2>Rank S</h2>
+							<p>This is for the elite. The queue where the best players are.</p>
+						</header>
+						<p>Rank S was the first addition to the server that was requested by the players. Minimum 1750 MMR
+						to get in- or a similar tournament performance. Every player entered is manually reviewed to make sure
+						they are eligible. If proof of your worth is what youre looking for, this is where to do it.</p>
+						<ul class="actions">
+							<li><a href="/leaderboards/RankS" class="button">Rank S Leaderboards</a></li>
+						</ul>
+					</div>
+					<a href="#five" class="goto-next scrolly">Next</a>
+				</section>
+			<!-- Five -->
+				<section id="five" class="wrapper style1 special fade-up">
+					<div class="container">
+						<header class="major">
+							<h2>So, are you convinced?</h2>
+							<p>Join the discord! If you're in University (or College for the NA folk), we have the best experience you can get.</p>
+						</header>
+					</div>
+						<footer class="major">
+							<ul class="actions special">
+								<li><a href="https://discord.gg/hu95nXR" class="button">Join Discord</a></li>
+							</ul>
+						</footer>
+				</section>
+
+			<!-- Five -->
+				<section id="six" class="wrapper style2 special fade">
+					<div class="container">
+						<header>
+							<h2>We do all this, completely free of charge.</h2>
+							<p>It's never necessary, but if you'd like to keep us around that little bit longer, please consider a donation :)</p>
+						</header>
+						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          					<input type="hidden" name="cmd" value="_s-xclick" />
+          					<input type="hidden" name="hosted_button_id" value="6SK2284P7VDAC" />
+          					<input style="display: block; margin: 0 auto; width: 300px;" type="image"
+							src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png"
+							name="submit" title="PayPal - The safer, easier way to pay online!"
+							alt="Donate with PayPal button" />
+          					<img alt="" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        				</form>
+					</div>
+				</section>
+
+			<!-- Footer -->
+				<footer id="footer">
+					<ul class="icons">
+						<li><a href="https://twitter.com/University6mans" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="mailto:Uni6Mans@gmail.com" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+					</ul>
+					<ul class="copyright">
+						<li>2020 &copy; U6M. All rights reserved.</li><li>Website by <a href="https://z3r.stream/">.zer</a></li>
+						<li>Bot maintained by <a href="https://github.com/JoelyMo101">Joel</a></li>
+					</ul>
+				</footer>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
 </html>
