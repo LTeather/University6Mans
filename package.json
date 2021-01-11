@@ -19,7 +19,7 @@
     "mathjs": "^6.2.5",
     "mongoose": "^5.8.1",
     "mysql2": "^2.1.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "paypal-rest-sdk": "^1.8.1",
     "php-express": "0.0.3"
   }
