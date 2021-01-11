@@ -7,7 +7,7 @@ Or you can visit the website: http://university6mans.com/
 
 This covers everything to do with the Discord bot and website.
 
-For more information or questions please don't hesitate to contact me on Discord: Doppla#1337
+This specific project is out-dated for the university6mans bot, and has since been re-written by Joel in my absence. This version is the last version of the bot I worked on, and to be used as a portfolio piece.
 
 ## What does this project do exactly?
 The idea of this project in the simplest form is to create a Discord bot that allows players to join a queue by doing !q in the #queue channel.
