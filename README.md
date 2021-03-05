@@ -30,7 +30,3 @@ Upload the database and run Apache & MySQL on XAMPP. Then hit F5 in Visual Studi
 
 You will need to run: "npm i"
 In the terminal for it to grab all of the modules required on first starting the project.
-
-## Donate
-If you want to support me, or have used this project and think I deserve to eat then please donate!
-https://www.paypal.me/LewisT11
